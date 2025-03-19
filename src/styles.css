@@ -134,3 +134,50 @@ a {
     color: var(--color-error);
 }
 
+.page {
+    min-height: 100vh;
+}
+
+.page-title {
+    margin: 0;
+    font-size: var(--font-size-large);
+    text-align: center;
+}
+
+.login-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-page__title {
+    margin-bottom: 40px;
+}
+
+.login-page__container {
+    display: flex;
+    flex-direction: column;
+    width: 340px;
+    height: 460px;
+    margin: 0 auto;
+    padding: 50px 30px 30px 30px;
+}
+
+.login-page__form {
+    flex-grow: 1;
+    margin-bottom: 14px;
+}
+
+.login-page__registration-link {
+    align-self: center;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    row-gap: 16px;
+}
+
+.login-form__submit-button {
+    margin-top: auto;
+}
