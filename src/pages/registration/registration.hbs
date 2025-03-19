@@ -1,1 +1,16 @@
-<h1>Регистрация</h1>
+<div class="page registration-page">
+  <div class="registration-page__container">
+    <h1 class="page-title registration-page__title">Регистрация</h1>
+    <form class="registration-form registration-page__form">
+      {{> Input id="email-input" name="email" type="text" label="Почта"}}
+      {{> Input id="username-input" name="username" type="text" label="Логин"}}
+      {{> Input id="firstname-input" name="firstname" type="text" label="Имя"}}
+      {{> Input id="surname-input" name="surname" type="text" label="Фамилия"}}
+      {{> Input id="phone-input" name="phone" type="text" label="Телефон"}}
+      {{> Input id="password-input" name="password" type="password" label="Пароль"}}
+      {{> Input id="password-confirmation-input" name="password-confirmation" type="password" label="Пароль (еще раз)"}}
+      {{> Button type="submit" text="Авторизоваться" class="registration-form__submit-button" }}
+    </form>
+    <a href="#" class="registration-page__login-link">Войти</a>
+  </div>
+</div>

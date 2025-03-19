@@ -5,6 +5,7 @@ import Button from "./components/Button";
 
 const PAGES = {
   Login: 'Login',
+  Registration: 'Registration',
 }
 
 Handlebars.registerPartial('Button', Button)
@@ -13,7 +14,7 @@ Handlebars.registerPartial('Input', Input);
 export default class App {
   constructor() {
     this.state = {
-      currentPage: PAGES.Login,
+      currentPage: PAGES.Registration,
     };
     this.appElement = document.getElementById('app');
   }
@@ -22,6 +23,9 @@ export default class App {
     switch (this.state.currentPage) {
       case PAGES.Login:
         this.appElement.innerHTML = Handlebars.compile(PageTemplates.LoginPage)();
+        break;
+      case PAGES.Registration:
+        this.appElement.innerHTML = Handlebars.compile(PageTemplates.RegistrationPage)();
         break;
       default:
         break;

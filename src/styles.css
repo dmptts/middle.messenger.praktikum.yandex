@@ -181,3 +181,42 @@ a {
 .login-form__submit-button {
     margin-top: auto;
 }
+
+.registration-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.registration-page__title {
+    margin-bottom: 40px;
+}
+
+.registration-page__container {
+    display: flex;
+    flex-direction: column;
+    width: 340px;
+    margin: 0 auto;
+    padding: 50px 30px 30px 30px;
+}
+
+.registration-page__form {
+    flex-grow: 1;
+    margin-bottom: 14px;
+}
+
+.registration-page__login-link {
+    align-self: center;
+}
+
+.registration-form {
+    display: flex;
+    flex-direction: column;
+    row-gap: 16px;
+}
+
+.registration-form__submit-button {
+    margin-top: auto;
+}
+
+
