@@ -28,7 +28,6 @@
     "express": "^4.21.2",
     "postcss": "^8.5.3",
     "postcss-preset-env": "^10.1.5",
-    "typescript": "^5.8.2",
     "vite": "^6.2.1",
     "vite-plugin-handlebars": "^2.0.0"
   },
