@@ -116,6 +116,7 @@ td {
 }
 
 .button-component {
+    display: block;
     width: 100%;
     padding: 12px 20px;
     color: var(--color-button-text);
@@ -261,13 +262,33 @@ td {
 }
 
 .page {
+    display: flex;
+    flex-direction: column;
     min-height: 100vh;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
 }
 
 .page-title {
     margin: 0;
     font-size: var(--font-size-large);
     text-align: center;
+}
+
+.temp-footer {
+    padding: 20px 60px;
+}
+
+.temp-footer ul {
+    display: flex;
+    column-gap: 16px;
+    padding: 0;
+    margin: 0;
+    list-style: none;
 }
 
 .login-page {
@@ -281,8 +302,7 @@ td {
 }
 
 .login-page__container {
-    display: flex;
-    flex-direction: column;
+    justify-content: center;
     width: 340px;
     height: 460px;
     margin: 0 auto;
@@ -290,7 +310,6 @@ td {
 }
 
 .login-page__form {
-    flex-grow: 1;
     margin-bottom: 14px;
 }
 
@@ -305,7 +324,7 @@ td {
 }
 
 .login-form__submit-button {
-    margin-top: auto;
+    margin-top: 60px;
 }
 
 .registration-page {
@@ -319,15 +338,13 @@ td {
 }
 
 .registration-page__container {
-    display: flex;
-    flex-direction: column;
+    justify-content: center;
     width: 340px;
     margin: 0 auto;
     padding: 50px 30px 30px 30px;
 }
 
 .registration-page__form {
-    flex-grow: 1;
     margin-bottom: 14px;
 }
 
@@ -342,7 +359,7 @@ td {
 }
 
 .registration-form__submit-button {
-    margin-top: auto;
+    margin-top: 48px;
 }
 
 .profile-page {
@@ -352,8 +369,7 @@ td {
 }
 
 .profile-page__container {
-    display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
     width: 510px;
     margin: 0 auto;
@@ -375,6 +391,7 @@ td {
 
 .profile-page__links-table {
     width: 100%;
+
     td {
         text-align: left;
     }
@@ -397,8 +414,7 @@ td {
 
 .edit-profile-page__container,
 .change-password-page__container {
-    display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
     width: 510px;
     margin: 0 auto;
@@ -433,6 +449,12 @@ td {
     }
 }
 
+.edit-profile-form__submit-button,
+.change-password-form__submit-button {
+    width: 280px;
+    margin: 0 auto;
+}
+
 .server-error-page,
 .not-found-error-page {
     display: flex;
@@ -442,8 +464,7 @@ td {
 
 .server-error-page__container,
 .not-found-error-page__container {
-    display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
     width: 510px;
     margin: 0 auto;

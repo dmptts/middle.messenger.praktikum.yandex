@@ -4,7 +4,8 @@ import Input from './components/Input';
 import Button from './components/Button';
 import Userpic from "./components/Userpic";
 import Badge from "./components/Badge";
-import BackButton from "./components/BackButton/index.js";
+import BackButton from "./components/BackButton";
+import TempFooter from "./components/TempFooter";
 
 const PAGES = {
   Login: 'Login',
@@ -23,11 +24,12 @@ Handlebars.registerPartial('Input', Handlebars.compile(Input));
 Handlebars.registerPartial('Userpic', Handlebars.compile(Userpic));
 Handlebars.registerPartial('Badge', Handlebars.compile(Badge));
 Handlebars.registerPartial('BackButton', Handlebars.compile(BackButton));
+Handlebars.registerPartial('TempFooter', Handlebars.compile(TempFooter));
 
 export default class App {
   constructor() {
     this.state = {
-      currentPage: PAGES.ChatList,
+      currentPage: PAGES.Login,
     };
     this.appElement = document.getElementById('app');
   }
@@ -64,5 +66,24 @@ export default class App {
       default:
         break;
     }
+
+    this.attachListeners();
+  }
+
+  attachListeners() {
+    document.getElementById('login-link').addEventListener('click', this.changePage.bind(this, PAGES.Login));
+    document.getElementById('registration-link').addEventListener('click', this.changePage.bind(this, PAGES.Registration));
+    document.getElementById('chat-list-link').addEventListener('click', this.changePage.bind(this, PAGES.ChatList));
+    document.getElementById('chat-link').addEventListener('click', this.changePage.bind(this, PAGES.Chat));
+    document.getElementById('profile-link').addEventListener('click', this.changePage.bind(this, PAGES.Profile));
+    document.getElementById('edit-profile-link').addEventListener('click', this.changePage.bind(this, PAGES.EditProfile));
+    document.getElementById('change-password-link').addEventListener('click', this.changePage.bind(this, PAGES.ChangePassword));
+    document.getElementById('404-link').addEventListener('click', this.changePage.bind(this, PAGES.NotFoundError));
+    document.getElementById('500-link').addEventListener('click', this.changePage.bind(this, PAGES.ServerError));
+  }
+
+  changePage(page) {
+    this.state.currentPage = page;
+    this.render()
   }
 }
