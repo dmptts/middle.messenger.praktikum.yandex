@@ -3,6 +3,8 @@ import Handlebars from 'handlebars';
 import Input from './components/Input';
 import Button from "./components/Button";
 import Userpic from "./components/Userpic";
+import Badge from "./components/Badge";
+import BackButton from "./components/BackButton/index.js";
 
 const PAGES = {
   Login: 'Login',
@@ -12,6 +14,8 @@ const PAGES = {
 Handlebars.registerPartial('Button', Button)
 Handlebars.registerPartial('Input', Input);
 Handlebars.registerPartial('Userpic', Handlebars.compile(Userpic));
+Handlebars.registerPartial('Badge', Handlebars.compile(Badge));
+Handlebars.registerPartial('BackButton', Handlebars.compile(BackButton));
 
 export default class App {
   constructor() {
