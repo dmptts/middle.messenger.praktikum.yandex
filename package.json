@@ -4,6 +4,9 @@
   "description": "",
   "main": "index.js",
   "type": "module",
+  "engines": {
+    "node": ">=12"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
