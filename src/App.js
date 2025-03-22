@@ -2,6 +2,7 @@ import * as PageTemplates from './pages';
 import Handlebars from 'handlebars';
 import Input from './components/Input';
 import Button from "./components/Button";
+import Userpic from "./components/Userpic";
 
 const PAGES = {
   Login: 'Login',
@@ -10,6 +11,7 @@ const PAGES = {
 
 Handlebars.registerPartial('Button', Button)
 Handlebars.registerPartial('Input', Input);
+Handlebars.registerPartial('Userpic', Handlebars.compile(Userpic));
 
 export default class App {
   constructor() {
