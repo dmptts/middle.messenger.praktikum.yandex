@@ -101,13 +101,19 @@ th {
     padding: 10px 0;
     font-size: var(--font-size-medium);
     font-weight: 500;
-}
 
-th {
+
 }
 
 td {
     color: var(--color-text-secondary);
+
+    input {
+        padding: 0;
+        border: none;
+        color: var(--color-text-secondary);
+        outline: none;
+    }
 }
 
 .button-component {
@@ -381,4 +387,44 @@ td {
 
 .profile-page__quit-button {
     color: var(--color-accent);
+}
+
+.edit-profile-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.edit-profile-page__container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 510px;
+    margin: 0 auto;
+    padding: 50px 30px 30px 30px;
+}
+
+.edit-profile-page__userpic {
+    margin-bottom: 90px;
+}
+
+.edit-profile-page__form {
+    width: 100%;
+}
+
+.edit-profile-page__data-table {
+    width: 100%;
+    margin-bottom: 50px;
+
+    th {
+        text-align: left;
+    }
+
+    td {
+        text-align: right;
+    }
+
+    input {
+        text-align: right;
+    }
 }
