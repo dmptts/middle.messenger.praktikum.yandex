@@ -11,6 +11,7 @@ const PAGES = {
   Registration: 'Registration',
   Profile: 'Profile',
   EditProfile: 'EditProfile',
+  ChangePassword: 'ChangePassword',
 }
 
 Handlebars.registerPartial('Button', Handlebars.compile(Button))
@@ -22,7 +23,7 @@ Handlebars.registerPartial('BackButton', Handlebars.compile(BackButton));
 export default class App {
   constructor() {
     this.state = {
-      currentPage: PAGES.EditProfile,
+      currentPage: PAGES.ChangePassword,
     };
     this.appElement = document.getElementById('app');
   }
@@ -38,9 +39,12 @@ export default class App {
       case PAGES.Profile:
         this.appElement.innerHTML = Handlebars.compile(PageTemplates.ProfilePage)();
         break;
-        case PAGES.EditProfile:
-          this.appElement.innerHTML = Handlebars.compile(PageTemplates.EditProfilePage)();
-          break;
+      case PAGES.EditProfile:
+        this.appElement.innerHTML = Handlebars.compile(PageTemplates.EditProfilePage)();
+        break;
+      case PAGES.ChangePassword:
+        this.appElement.innerHTML = Handlebars.compile(PageTemplates.ChangePasswordPage)();
+        break;
       default:
         break;
     }

@@ -101,8 +101,6 @@ th {
     padding: 10px 0;
     font-size: var(--font-size-medium);
     font-weight: 500;
-
-
 }
 
 td {
@@ -389,13 +387,15 @@ td {
     color: var(--color-accent);
 }
 
-.edit-profile-page {
+.edit-profile-page,
+.change-password-page {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.edit-profile-page__container {
+.edit-profile-page__container,
+.change-password-page__container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -404,15 +404,18 @@ td {
     padding: 50px 30px 30px 30px;
 }
 
-.edit-profile-page__userpic {
+.edit-profile-page__userpic,
+.change-password-page__userpic {
     margin-bottom: 90px;
 }
 
-.edit-profile-page__form {
+.edit-profile-page__form,
+.change-password-page__form {
     width: 100%;
 }
 
-.edit-profile-page__data-table {
+.edit-profile-page__table,
+.change-password-page__table {
     width: 100%;
     margin-bottom: 50px;
 
