@@ -462,3 +462,10 @@ td {
     font-size: var(--font-size-large);
     font-weight: 500;
 }
+
+.chat-list-page,
+.chat-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

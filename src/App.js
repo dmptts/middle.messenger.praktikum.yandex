@@ -14,6 +14,8 @@ const PAGES = {
   ChangePassword: 'ChangePassword',
   NotFoundError: 'NotFoundError',
   ServerError: 'ServerError',
+  ChatList: 'ChatList',
+  Chat: 'Chat',
 }
 
 Handlebars.registerPartial('Button', Handlebars.compile(Button))
@@ -25,7 +27,7 @@ Handlebars.registerPartial('BackButton', Handlebars.compile(BackButton));
 export default class App {
   constructor() {
     this.state = {
-      currentPage: PAGES.NotFoundError,
+      currentPage: PAGES.ChatList,
     };
     this.appElement = document.getElementById('app');
   }
@@ -46,6 +48,12 @@ export default class App {
         break;
       case PAGES.ChangePassword:
         this.appElement.innerHTML = Handlebars.compile(PageTemplates.ChangePasswordPage)();
+        break;
+      case PAGES.ChatList:
+        this.appElement.innerHTML = Handlebars.compile(PageTemplates.ChatListPage)();
+        break;
+      case PAGES.Chat:
+        this.appElement.innerHTML = Handlebars.compile(PageTemplates.ChatPage)();
         break;
       case PAGES.NotFoundError:
         this.appElement.innerHTML = Handlebars.compile(PageTemplates.NotFoundErrorPage)();
