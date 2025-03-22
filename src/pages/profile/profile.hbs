@@ -1,0 +1,47 @@
+<div class="page profile-page">
+  <div class="profile-page__container">
+    {{> Userpic size="130" class="profile-page__userpic" alt="Аватар пользователя" withChange=true }}
+    <table class="profile-page__data-table">
+      <tr>
+        <th>Почта</th>
+        <td>pochta@yandex.ru</td>
+      </tr>
+      <tr>
+        <th>Логин</th>
+        <td>ivanivanov</td>
+      </tr>
+      <tr>
+        <th>Имя</th>
+        <td>Иван</td>
+      </tr>
+      <tr>
+        <th>Фамилия</th>
+        <td>Иванов</td>
+      </tr>
+      <tr>
+        <th>Имя в чате</th>
+        <td>Иван</td>
+      </tr>
+      <tr>
+        <th>Телефон</th>
+        <td>+7 (909) 967 30 30</td>
+      </tr>
+    </table>
+
+    <table class="profile-page__links-table">
+      <tbody>
+      <tr>
+        <td><a href="#">Изменить данные</a></td>
+      </tr>
+      <tr>
+        <td><a href="#">Изменить пароль</a></td>
+      </tr>
+      <tr>
+        <td><a href="#" class="profile-page__quit-button">Выйти</a></td>
+      </tr>
+      </tbody>
+    </table>
+
+    {{> BackButton }}
+  </div>
+</div>

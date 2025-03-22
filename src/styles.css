@@ -23,12 +23,14 @@
     --color-primary-disabled: #a3b7f3;
     --color-primary-text: #ffffff;
     --color-primary-text-disabled: #d0d7f3;
+    --color-accent: #ff2f2f;
     --color-grey: #efefef;
     --color-text: #1e1e1e;
     --color-text-secondary: #999999;
     --color-button-text: #ffffff;
     --color-border: #eaeaea;
     --color-background: #ffffff;
+    --color-background-secondary: #fbfbfb;
     --color-error: #ff2f2f;
     --font-size-extra-small: 8px;
     --font-size-small: 11px;
@@ -84,6 +86,30 @@ a {
     }
 }
 
+table {
+    padding: 0;
+    border-collapse: collapse;
+
+}
+
+tr {
+    border-bottom: 1px solid var(--color-border);
+}
+
+td,
+th {
+    padding: 10px 0;
+    font-size: var(--font-size-medium);
+    font-weight: 500;
+}
+
+th {
+}
+
+td {
+    color: var(--color-text-secondary);
+}
+
 .button-component {
     width: 100%;
     padding: 12px 20px;
@@ -132,6 +158,101 @@ a {
     padding-top: 7px;
     font-size: var(--font-size-extra-small);
     color: var(--color-error);
+}
+
+.userpic {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--color-border);
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.userpic--with-change {
+    cursor: pointer;
+
+    &::before {
+        content: "Поменять аватар";
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        font-size: var(--font-size-medium);
+        font-weight: 600;
+        color: #fff;
+        border-radius: 50%;
+        background: rgba(0, 0, 0, 0.5);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    &:hover::before {
+        opacity: 1;
+    }
+}
+
+.userpic__image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.userpic__placeholder {
+    width: 40px;
+    height: 40px;
+    background: url("/src/images/icon-image-placeholder.svg") no-repeat center;
+    background-size: contain;
+}
+
+.badge {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: var(--font-size-small);
+    color: var(--color-button-text);
+    background-color: var(--color-primary);
+    border-radius: 50%;
+    padding: 8px;
+}
+
+.back-button {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 64px;
+}
+
+.back-button__button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border: none;
+    background-color: var(--color-background-secondary);
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+
+    &:hover,
+    &:focus {
+        background-color: #f0f0f0;
+    }
+
+    &:active {
+        background-color: #e5e5e5;
+    }
+
+    &:disabled {
+        background-color: #999999;
+    }
 }
 
 .page {
@@ -219,4 +340,45 @@ a {
     margin-top: auto;
 }
 
+.profile-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
+.profile-page__container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 510px;
+    margin: 0 auto;
+    padding: 50px 30px 30px 30px;
+}
+
+.profile-page__data-table {
+    width: 100%;
+    margin-bottom: 50px;
+
+    th {
+        text-align: left;
+    }
+
+    td {
+        text-align: right;
+    }
+}
+
+.profile-page__links-table {
+    width: 100%;
+    td {
+        text-align: left;
+    }
+}
+
+.profile-page__userpic {
+    margin-bottom: 90px;
+}
+
+.profile-page__quit-button {
+    color: var(--color-accent);
+}
