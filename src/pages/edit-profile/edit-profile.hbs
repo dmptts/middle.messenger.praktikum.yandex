@@ -1,50 +1,52 @@
 <div class="page edit-profile-page">
-  <div class="container edit-profile-page__container">
-    {{> Userpic size="130" class="edit-profile-page__userpic" alt="Аватар пользователя" withChange=true }}
-    <form action="#" class="edit-profile-page__form edit-profile-form">
-      <table class="edit-profile-page__table">
-        <tr>
-          <th><label for="email-input">Почта</label></th>
-          <td>
-            <input id="email-input" name="email" type="text" value="pochta@yandex.ru">
-          </td>
-        </tr>
-        <tr>
-          <th><label for="login-input">Логин</label></th>
-          <td>
-            <input id="login-input" name="login" type="text" value="ivanivanov">
-          </td>
-        </tr>
-        <tr>
-          <th><label for="name-input">Имя</label></th>
-          <td>
-            <input id="name-input" name="first_name" type="text" value="Иван">
-          </td>
-        </tr>
-        <tr>
-          <th><label for="surname-input">Фамилия</label></th>
-          <td>
-            <input id="surname-input" name="second_name" type="text" value="Иванов">
-          </td>
-        </tr>
-        <tr>
-          <th><label for="chat-name-input">Имя в чате</label></th>
-          <td>
-            <input id="chat-name-input" name="display_name" type="text" value="Иван">
-          </td>
-        </tr>
-        <tr>
-          <th><label for="phone-input">Телефон</label></th>
-          <td>
-            <input id="phone-input" name="phone" type="text" value="+7 (909) 967 30 30">
-          </td>
-        </tr>
-      </table>
+  <main>
+    <div class="container edit-profile-page__container">
+      {{> Userpic size="130" class="edit-profile-page__userpic" alt="Аватар пользователя" withChange=true }}
+      <form action="#" class="edit-profile-page__form edit-profile-form">
+        <table class="edit-profile-page__table">
+          <tr>
+            <th><label for="email-input">Почта</label></th>
+            <td>
+              <input id="email-input" name="email" type="text" value="pochta@yandex.ru">
+            </td>
+          </tr>
+          <tr>
+            <th><label for="login-input">Логин</label></th>
+            <td>
+              <input id="login-input" name="login" type="text" value="ivanivanov">
+            </td>
+          </tr>
+          <tr>
+            <th><label for="name-input">Имя</label></th>
+            <td>
+              <input id="name-input" name="first_name" type="text" value="Иван">
+            </td>
+          </tr>
+          <tr>
+            <th><label for="surname-input">Фамилия</label></th>
+            <td>
+              <input id="surname-input" name="second_name" type="text" value="Иванов">
+            </td>
+          </tr>
+          <tr>
+            <th><label for="chat-name-input">Имя в чате</label></th>
+            <td>
+              <input id="chat-name-input" name="display_name" type="text" value="Иван">
+            </td>
+          </tr>
+          <tr>
+            <th><label for="phone-input">Телефон</label></th>
+            <td>
+              <input id="phone-input" name="phone" type="text" value="+7 (909) 967 30 30">
+            </td>
+          </tr>
+        </table>
 
-      {{> Button text="Сохранить" class="edit-profile-form__submit-button" }}
-    </form>
+        {{> Button text="Сохранить" class="edit-profile-form__submit-button" }}
+      </form>
 
-    {{> BackButton }}
-  </div>
+      {{> BackButton }}
+    </div>
+  </main>
   {{> TempFooter }}
 </div>

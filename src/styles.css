@@ -51,6 +51,7 @@ html,
 body {
     margin: 0;
     padding: 0;
+    min-height: 100vh;
 }
 
 html {
@@ -267,6 +268,12 @@ td {
     min-height: 100vh;
 }
 
+.page main {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
 .container {
     display: flex;
     flex-direction: column;
@@ -285,16 +292,11 @@ td {
 
 .temp-footer ul {
     display: flex;
+    justify-content: center;
     column-gap: 16px;
     padding: 0;
     margin: 0;
     list-style: none;
-}
-
-.login-page {
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
 .login-page__title {
@@ -327,12 +329,6 @@ td {
     margin-top: 60px;
 }
 
-.registration-page {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 .registration-page__title {
     margin-bottom: 40px;
 }
@@ -360,12 +356,6 @@ td {
 
 .registration-form__submit-button {
     margin-top: 48px;
-}
-
-.profile-page {
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
 .profile-page__container {
@@ -403,13 +393,6 @@ td {
 
 .profile-page__quit-button {
     color: var(--color-accent);
-}
-
-.edit-profile-page,
-.change-password-page {
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
 .edit-profile-page__container,
@@ -455,13 +438,6 @@ td {
     margin: 0 auto;
 }
 
-.server-error-page,
-.not-found-error-page {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 .server-error-page__container,
 .not-found-error-page__container {
     justify-content: center;
@@ -482,11 +458,4 @@ td {
     margin-bottom: 70px;
     font-size: var(--font-size-large);
     font-weight: 500;
-}
-
-.chat-list-page,
-.chat-page {
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
