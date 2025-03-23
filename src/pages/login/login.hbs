@@ -1,0 +1,14 @@
+<div class="page login-page">
+  <main>
+    <div class="container login-page__container">
+      <h1 class="page-title login-page__title">Вход</h1>
+      <form class="login-form login-page__form">
+        {{> Input id="username-input" name="login" type="text" label="Логин"}}
+        {{> Input id="password-input" name="password" type="password" label="Пароль"}}
+        {{> Button type="submit" text="Авторизоваться" class="login-form__submit-button" }}
+      </form>
+      <a href="#" class="login-page__registration-link">Нет аккаунта?</a>
+    </div>
+  </main>
+  {{> TempFooter }}
+</div>
