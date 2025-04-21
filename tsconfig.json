@@ -1,0 +1,17 @@
+{
+  "include": ["src", "types"],
+  "exclude": ["node_modules", "dist"],
+  "compilerOptions": {
+    "target": "es2020",
+    "module": "ESNext",
+    "lib": ["DOM", "ES2020"],
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "sourceMap": true,
+    "moduleResolution": "bundler",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true
+  }
+}
