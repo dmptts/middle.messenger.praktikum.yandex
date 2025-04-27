@@ -2,92 +2,110 @@ import Handlebars from 'handlebars';
 import { nanoid } from 'nanoid';
 import EventBus from './EventBus';
 
-enum Events {
-  INIT = 'FLOW_INIT',
-  RENDER = 'FLOW_RENDER',
-  UPDATE = 'FLOW_DID_UPDATE',
-}
-
-type EventListeners = {
-  [Events.INIT]: [];
-  [Events.RENDER]: [];
-  [Events.UPDATE]: [oldProps: PlainProps, props: PlainProps];
-}
-
-type EventListenerProps = {
-  -readonly [K in keyof typeof eventTypesMap]?: (e: Event) => void;
-};
-
-type ChildProps = {
-  [key: string]: Component;
-};
-
-type PlainProps = {
-  [key: string]: unknown;
-};
-
-type ComponentProps = EventListenerProps & PlainProps & Partial<ChildProps>;
-
 const eventTypesMap = {
   onClick: 'click',
+  onBlur: 'blur',
+  onInput: 'input',
+  // etc...
 } as const;
 
-export default abstract class Component {
-  private _id: string;
-  private _bus: EventBus<EventListeners>;
-  private _listeners: EventListenerProps;
-  private _children: ChildProps;
-  private _props: PlainProps;
-  private _element?: HTMLElement;
+enum Events {
+  INIT = 'FLOW_INIT',
+  DID_MOUNT = 'FLOW_DID_MOUNT',
+  RENDER = 'FLOW_RENDER',
+  DID_UPDATE = 'FLOW_DID_UPDATE',
+}
 
-  protected constructor(props?: ComponentProps) {
+type EventListeners<P> = {
+  [Events.INIT]: [];
+  [Events.DID_MOUNT]: [];
+  [Events.RENDER]: [];
+  [Events.DID_UPDATE]: [oldProps: ComponentPrimitives<P>, props: ComponentPrimitives<P>];
+}
+
+export type BaseProps = Record<string, unknown>
+type Nullable<T> = T | null;
+type ComponentEvents<P> = Record<keyof P, EventListener>;
+type ComponentChildren<P> = Record<keyof P, Component | Component[]>;
+type ComponentPrimitives<P> = Record<keyof P, string | number | boolean | null | unknown>;
+
+export default abstract class Component<P extends BaseProps = never> {
+  private readonly _id: string;
+  private _bus: EventBus<EventListeners<P>>;
+  private _listeners: Nullable<ComponentEvents<P>>;
+  private _children: Nullable<ComponentChildren<P>>;
+  private _props: Nullable<ComponentPrimitives<P>>;
+  private _element: Nullable<HTMLElement>;
+
+  protected constructor(props?: P) {
     this._id = nanoid();
     this._bus = new EventBus();
+    this._listeners = null;
+    this._children = null;
+    this._props = null;
+    this._element = null;
 
-    const { listeners, children, plainProps } = this._parseProps(props ?? {});
-    this._listeners = listeners;
-    this._children = children;
-    this._props = this._proxyProps(plainProps ?? {});
+    if (props) {
+      const { listeners, children, primitives } = this._parseProps(props);
+      this._listeners = listeners;
+      this._children = children;
+      this._props = primitives;
+    }
 
     this._registerEvents();
     this._bus.emit(Events.INIT);
   }
 
-  set props(props: ComponentProps) {
-    if (this._props) {
-      Object.assign(this._props, props);
-    } else {
-      this._props = this._proxyProps(props);
-    }
-  }
+  abstract render(): DocumentFragment;
 
   get element() {
     return this._element;
   }
 
-  abstract render(): DocumentFragment;
+  dispatchComponentDidMount() {
+    this._bus.emit(Events.DID_MOUNT);
+  }
 
-  protected compile(template: string) {
-    const propsAndStubs = { ...this._props };
+  componentDidMount?(): void;
+
+  componentDidUpdate?(oldProps: ComponentPrimitives<P>, props: ComponentPrimitives<P>): void;
+
+  protected _compile(template: string) {
+    const stubs = {} as Record<keyof P, string | string[]>;
     const fragment = document.createElement('template');
 
-    Object.entries(this._children).forEach(([key, child]) => {
-      propsAndStubs[key] = `<div data-id="${child._id}"></div>`;
-    });
+    if (this._children) {
+      Object.entries(this._children).forEach(([key, child]) => {
+        if (Array.isArray(child)) {
+          stubs[key as keyof P] = child.map((component) => `<div data-id="${component._id}"></div>`);
+        } else {
+          stubs[key as keyof P] = `<div data-id="${child._id}"></div>`;
+        }
+      });
+    }
 
-    console.log(propsAndStubs);
+    fragment.innerHTML = Handlebars.compile(template)(Object.assign({}, this._props, stubs));
 
-    fragment.innerHTML = Handlebars.compile(template)(propsAndStubs);
+    if (this._children) {
+      Object.values(this._children).forEach((child) => {
+        if (Array.isArray(child)) {
+          const stubs = child.map((component) => fragment.content.querySelector(`[data-id="${component._id}"]`)).filter(Boolean) as HTMLElement[];
 
-    Object.values(this._children).forEach(child => {
-      const stub = fragment.content.querySelector(`[data-id="${child._id}"]`);
-      console.log(child)
-      if (!stub) {
-        return;
-      }
+          if (!stubs.length) {
+            return;
+          }
 
-      stub.replaceWith(child.element!);
-    });
+          stubs.forEach((stub, i) => stub.replaceWith(child[i].element!));
+        } else {
+          const stub = fragment.content.querySelector(`[data-id="${child._id}"]`);
+          if (!stub) {
+            return;
+          }
+
+          stub.replaceWith(child.element!);
+        }
+      });
+    }
 
     return fragment.content;
   }
@@ -95,21 +113,38 @@ export default abstract class Component {
   private _registerEvents() {
     this._bus.on(Events.INIT, this._init.bind(this));
     this._bus.on(Events.RENDER, this._render.bind(this));
-    // this._bus.on(Events.UPDATE, this._componentDidUpdate.bind(this));
+    this._bus.on(Events.DID_MOUNT, this._componentDidMount.bind(this));
+    this._bus.on(Events.DID_UPDATE, this._componentDidUpdate.bind(this));
   }
 
   private _init() {
-    // this._template = document.createElement('template');
     this._bus.emit(Events.RENDER);
   }
 
   private _render() {
-    console.log('RENDER ', this.constructor.name);
-    const tempDiv = document.createElement('div');
-    tempDiv.appendChild(this.render());
-    this._element = tempDiv.firstChild as HTMLElement;
+    this._removeEvents();
+
+    const fragment = this.render();
+    const newElement = fragment.firstElementChild as HTMLElement;
+
+    if (!newElement) {
+      throw new Error('Render должен возвращать непустой фрагмент');
+    }
+
+    if (this._element) {
+      this._element.replaceWith(newElement);
+    }
+    this._element = newElement;
     this._element?.setAttribute('data-id', this._id);
     this._addEvents();
+  }
+
+  private _componentDidMount() {
+    this.componentDidMount?.();
+  }
+
+  private _componentDidUpdate(oldProps: ComponentPrimitives<P>, props: ComponentPrimitives<P>) {
+    console.log(oldProps, props);
   }
 
   private _addEvents() {
@@ -120,48 +155,50 @@ export default abstract class Component {
     }
 
     for (const listener in this._listeners) {
-      const handler = this._listeners[listener as keyof EventListenerProps];
+      const handler = this._listeners[listener as keyof P];
 
-      if (handler) {
-        this._element.addEventListener(
-          eventTypesMap[listener as keyof typeof eventTypesMap],
-          handler.bind(this),
-        );
+      if (!handler) {
+        return;
       }
+
+      this._element.addEventListener(
+        eventTypesMap[listener as keyof typeof eventTypesMap],
+        handler.bind(this),
+      );
     }
   }
 
-  private _parseProps(props: ComponentProps) {
-    const listeners = {} as EventListenerProps;
-    const children = {} as ChildProps;
-    const plainProps = {} as PlainProps;
+  private _removeEvents() {
+    if (!this._listeners || !this._element) {
+      return;
+    }
+
+    for (const listener in this._listeners) {
+      this._element?.removeEventListener(listener, this._listeners[listener as keyof P]);
+    }
+  }
+
+  private _parseProps(props: P) {
+    const listeners = {} as ComponentEvents<P>;
+    const children = {} as ComponentChildren<P>;
+    const primitives = {} as ComponentPrimitives<P>;
 
     Object.entries(props).forEach(([key, value]) => {
       if (key in eventTypesMap && typeof value === 'function') {
-        listeners[key as keyof typeof eventTypesMap] = value.bind(this);
-      } else if (value instanceof Component) {
-        children[key] = value;
+        listeners[key as keyof P] = value.bind(this);
+      } else if (
+        value instanceof Component
+        || (Array.isArray(value) && value.every((el) => el instanceof Component))) {
+        children[key as keyof P] = value;
       } else {
-        plainProps[key] = value;
+        primitives[key as keyof P] = value;
       }
     });
 
-    return { listeners, children, plainProps };
-  }
-
-  // private _componentDidUpdate(oldProps: PlainProps, props: PlainProps) {
-  //   console.log('FLOW_DID_UPDATE');
-  //   this._bus.emit(Events.RENDER);
-  // }
-
-  private _proxyProps(props: PlainProps) {
-    return new Proxy(props, {
-      set: (target, prop, value) => {
-        const oldProps = { ...target };
-        target[prop as keyof PlainProps] = value;
-        this._bus.emit(Events.UPDATE, oldProps, target);
-        return true;
-      },
-    });
+    return {
+      listeners,
+      children,
+      primitives,
+    };
   }
 }
