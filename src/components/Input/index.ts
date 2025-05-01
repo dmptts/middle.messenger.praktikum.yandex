@@ -19,12 +19,22 @@ export default class Input extends Component<InputProps> {
     super(props);
   }
 
+  get value() {
+    const input = this._element?.querySelector('input');
+
+    if (!input) {
+      return '';
+    }
+
+    return input.value;
+  }
+
   render() {
     return this.compile(template);
   }
 
   validate() {
-    const input = this._element?.querySelector('input') as HTMLInputElement;
+    const input = this._element?.querySelector('input');
     const errorContainer = this.element?.querySelector('.input-component__error');
 
     if (!input || !errorContainer) {

@@ -1,5 +1,6 @@
 import Page404 from './pages/404';
 import LoginPage from './pages/login';
+import RegistrationPage from './pages/registration';
 import Component from './services/Component';
 import Store from './services/Store';
 import { BaseProps } from './utils/types';
@@ -21,7 +22,7 @@ interface GlobalState {
 }
 
 export const globalStorage = new Store<GlobalState>({
-  currentPage: Pages.Login,
+  currentPage: Pages.Registration,
 });
 
 interface AppProps extends BaseProps {
@@ -45,6 +46,8 @@ export default class App extends Component<AppProps> {
         fragment.content.appendChild(new LoginPage().element!);
         break;
       case Pages.Registration:
+        fragment.content.appendChild(new RegistrationPage().element!);
+        break;
       case Pages.Profile:
       case Pages.EditProfile:
       case Pages.ChangePassword:

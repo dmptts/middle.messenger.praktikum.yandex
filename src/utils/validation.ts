@@ -37,3 +37,51 @@ export const validatePassword = (password: string) => {
 
   return null;
 };
+
+export const validatePasswordConfirmation = (password: string, passwordConfirmation: string) => {
+  if (password !== passwordConfirmation) {
+    return 'Пароли не совпадают';
+  }
+
+  return null;
+};
+
+export const validateEmail = (email: string) => {
+  if (!/^[a-zA-Z0-9._-]+@[a-zA-Z]+\.[a-zA-Z]{2,}$/.test(email)) {
+    return 'Неверный формат e-mail';
+  }
+
+  return null;
+};
+
+export const validateName = (name: string) => {
+  if (!/^[A-ZА-Я]/.test(name)) {
+    return 'Должно начинаться с заглавной буквы';
+  }
+
+  if (/\s/.test(name)) {
+    return 'Не должно содержать пробелов';
+  }
+
+  if (/\d/.test(name)) {
+    return 'Не должно содержать цифры';
+  }
+
+  if (!/^[a-zA-Zа-яА-ЯёЁ]+(-[a-zA-Zа-яА-ЯёЁ]+)*$/.test(name)) {
+    return 'Не должно содержать спецсимволы';
+  }
+
+  return null;
+};
+
+export const validatePhone = (phone: string) => {
+  if (phone.length < 10 || phone.length > 15) {
+    return 'Длина должна быть от 10 до 15 символов';
+  }
+
+  if (!/^\+?\d+$/.test(phone)) {
+    return 'Допустимы только цифры';
+  }
+
+  return null;
+};
