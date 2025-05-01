@@ -1,11 +1,13 @@
-export default class EventBus {
-  private readonly _listeners: Record<string, ((...args: unknown[]) => void)[]>;
+export default class EventBus<E extends Record<string, unknown[]>> {
+  private readonly _listeners: {
+    [K in keyof E]?: Array<(...args: E[K]) => void>;
+  } = {};
 
   constructor() {
     this._listeners = {};
   }
 
-  on(event: string, callback: (...args: unknown[]) => void) {
+  on<K extends keyof E>(event: K, callback: (...args: E[K]) => void) {
     if (!this._listeners[event]) {
       this._listeners[event] = [];
     }
@@ -13,17 +15,17 @@ export default class EventBus {
     this._listeners[event].push(callback);
   }
 
-  emit(event: string, ...args: unknown[]) {
+  emit<K extends keyof E>(event: K, ...args: E[K]) {
     if (!this._listeners[event]) {
-      throw new Error(`Нет события: ${event}`);
+      throw new Error(`Нет события: ${event.toString()}`);
     }
 
-    this._listeners[event].forEach((listener) => listener(args));
+    this._listeners[event].forEach((listener) => listener(...args));
   }
 
-  off(event: string, callback: (...args: unknown[]) => void) {
+  off<K extends keyof E>(event: K, callback: (...args: E[K]) => void) {
     if (!this._listeners[event]) {
-      throw new Error(`Нет события: ${event}`);
+      throw new Error(`Нет события: ${event.toString()}`);
     }
 
     this._listeners[event] = this._listeners[event].filter(
