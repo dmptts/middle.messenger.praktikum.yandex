@@ -4,7 +4,7 @@
   "compilerOptions": {
     "target": "es2020",
     "module": "ESNext",
-    "lib": ["DOM", "ES2020"],
+    "lib": ["DOM", "ES2020", "DOM.Iterable"],
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
