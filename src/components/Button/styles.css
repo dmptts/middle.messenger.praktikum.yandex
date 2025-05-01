@@ -1,0 +1,25 @@
+.button-component {
+    display: block;
+    width: 100%;
+    padding: 12px 20px;
+    color: var(--color-button-text);
+    background-color: var(--color-primary);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+
+    &:hover,
+    &:focus {
+        background-color: var(--color-primary-hover);
+    }
+
+    &:active {
+        background-color: var(--color-primary-active);
+    }
+
+    &:disabled {
+        color: var(--color-primary-text-disabled);
+        background-color: var(--color-primary-disabled);
+        cursor: not-allowed;
+    }
+}
