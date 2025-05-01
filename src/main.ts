@@ -1,5 +1,6 @@
-import App from "./App";
+import App from './App';
+import renderDOM from './utils/renderDOM';
 
 window.addEventListener('DOMContentLoaded', () => {
-  new App().render();
-})
+  renderDOM('#app', new App());
+});
