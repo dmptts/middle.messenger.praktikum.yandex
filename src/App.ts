@@ -42,6 +42,15 @@ export default class App extends Component<AppProps> {
 
     switch (globalStorage.state.currentPage) {
       case Pages.Login:
+        fragment.content.appendChild(new LoginPage().element!);
+        break;
+      case Pages.Registration:
+      case Pages.Profile:
+      case Pages.EditProfile:
+      case Pages.ChangePassword:
+      case Pages.ChatList:
+      case Pages.Chat:
+      case Pages.ServerError:
       default:
         fragment.content.appendChild(new Page404().element!);
     }
