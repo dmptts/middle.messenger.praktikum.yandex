@@ -1,11 +1,13 @@
 import Handlebars from 'handlebars';
 import { nanoid } from 'nanoid';
+import { BaseProps, Nullable } from '../utils/types';
 import EventBus from './EventBus';
 
-const eventTypesMap = {
+export const eventTypesMap = {
   onClick: 'click',
   onBlur: 'blur',
   onInput: 'input',
+  onSubmit: 'submit',
   // etc...
 } as const;
 
@@ -23,40 +25,59 @@ type EventListeners<P> = {
   [Events.DID_UPDATE]: [oldProps: ComponentPrimitives<P>, props: ComponentPrimitives<P>];
 }
 
-export type BaseProps = Record<string, unknown>
-type Nullable<T> = T | null;
 type ComponentEvents<P> = Record<keyof P, EventListener>;
-type ComponentChildren<P> = Record<keyof P, Component | Component[]>;
+type ComponentChildren<P> = Record<keyof P, Component<BaseProps> | Component<BaseProps>[]>;
 type ComponentPrimitives<P> = Record<keyof P, string | number | boolean | null | unknown>;
 
 export default abstract class Component<P extends BaseProps = never> {
+  protected _listeners: Nullable<ComponentEvents<P>>;
+  protected _children: Nullable<ComponentChildren<P>>;
+  protected _primitives: Nullable<ComponentPrimitives<P>>;
+  protected _element: Nullable<HTMLElement>;
   private readonly _id: string;
+  private _props: Nullable<P>;
   private _bus: EventBus<EventListeners<P>>;
-  private _listeners: Nullable<ComponentEvents<P>>;
-  private _children: Nullable<ComponentChildren<P>>;
-  private _props: Nullable<ComponentPrimitives<P>>;
-  private _element: Nullable<HTMLElement>;
 
   protected constructor(props?: P) {
     this._id = nanoid();
     this._bus = new EventBus();
+    this._props = null;
     this._listeners = null;
     this._children = null;
-    this._props = null;
+    this._primitives = null;
     this._element = null;
 
     if (props) {
-      const { listeners, children, primitives } = this._parseProps(props);
+      this._props = props;
+      const { listeners, children, primitives } = this._parseProps(this._props);
       this._listeners = listeners;
       this._children = children;
-      this._props = primitives;
+      this._primitives = this._proxyProps(primitives);
     }
 
     this._registerEvents();
     this._bus.emit(Events.INIT);
   }
 
-  abstract render(): DocumentFragment;
+  get props(): Nullable<P> {
+    return this._props;
+  }
+
+  set props(props: Partial<P>) {
+    this._props = { ...(this._props ?? {}), ...props } as P;
+    const { listeners, children, primitives } = this._parseProps(this._props);
+
+    this._listeners = listeners;
+    this._children = children;
+
+    if (this._primitives) {
+      for (const key in primitives) {
+        this._primitives[key] = primitives[key];
+      }
+    } else {
+      this._primitives = this._proxyProps(primitives);
+    }
+  }
 
   get element() {
     return this._element;
@@ -66,30 +87,36 @@ export default abstract class Component<P extends BaseProps = never> {
     this._bus.emit(Events.DID_MOUNT);
   }
 
-  componentDidMount?(): void;
+  protected abstract render(): DocumentFragment;
 
-  componentDidUpdate?(oldProps: ComponentPrimitives<P>, props: ComponentPrimitives<P>): void;
+  protected componentDidMount?(): void;
 
-  protected _compile(template: string) {
+  protected componentDidUpdate?(): void;
+
+  protected compile(template: string) {
     const stubs = {} as Record<keyof P, string | string[]>;
     const fragment = document.createElement('template');
 
     if (this._children) {
       Object.entries(this._children).forEach(([key, child]) => {
         if (Array.isArray(child)) {
-          stubs[key as keyof P] = child.map((component) => `<div data-id="${component._id}"></div>`);
+          stubs[key as keyof P] = child
+            .map((component) => `<div data-id="${component._id}"></div>`)
+            .join('');
         } else {
           stubs[key as keyof P] = `<div data-id="${child._id}"></div>`;
         }
       });
     }
 
-    fragment.innerHTML = Handlebars.compile(template)(Object.assign({}, this._props, stubs));
+    fragment.innerHTML = Handlebars.compile(template)(Object.assign({}, this._primitives, stubs));
 
     if (this._children) {
       Object.values(this._children).forEach((child) => {
         if (Array.isArray(child)) {
-          const stubs = child.map((component) => fragment.content.querySelector(`[data-id="${component._id}"]`)).filter(Boolean) as HTMLElement[];
+          const stubs = child
+            .map((component) => fragment.content.querySelector(`[data-id="${component._id}"]`))
+            .filter(Boolean) as HTMLElement[];
 
           if (!stubs.length) {
             return;
@@ -110,44 +137,7 @@ export default abstract class Component<P extends BaseProps = never> {
     return fragment.content;
   }
 
-  private _registerEvents() {
-    this._bus.on(Events.INIT, this._init.bind(this));
-    this._bus.on(Events.RENDER, this._render.bind(this));
-    this._bus.on(Events.DID_MOUNT, this._componentDidMount.bind(this));
-    this._bus.on(Events.DID_UPDATE, this._componentDidUpdate.bind(this));
-  }
-
-  private _init() {
-    this._bus.emit(Events.RENDER);
-  }
-
-  private _render() {
-    this._removeEvents();
-
-    const fragment = this.render();
-    const newElement = fragment.firstElementChild as HTMLElement;
-
-    if (!newElement) {
-      throw new Error('Render должен возвращать непустой фрагмент');
-    }
-
-    if (this._element) {
-      this._element.replaceWith(newElement);
-    }
-    this._element = newElement;
-    this._element?.setAttribute('data-id', this._id);
-    this._addEvents();
-  }
-
-  private _componentDidMount() {
-    this.componentDidMount?.();
-  }
-
-  private _componentDidUpdate(oldProps: ComponentPrimitives<P>, props: ComponentPrimitives<P>) {
-    console.log(oldProps, props);
-  }
-
-  private _addEvents() {
+  protected addEvents() {
     if (!this._element) {
       throw new Error(
         `Элемент еще не создан`,
@@ -168,14 +158,63 @@ export default abstract class Component<P extends BaseProps = never> {
     }
   }
 
-  private _removeEvents() {
+  protected removeEvents() {
     if (!this._listeners || !this._element) {
       return;
     }
 
     for (const listener in this._listeners) {
-      this._element?.removeEventListener(listener, this._listeners[listener as keyof P]);
+      this._element?.removeEventListener(
+        eventTypesMap[listener as keyof typeof eventTypesMap],
+        this._listeners[listener as keyof P],
+      );
     }
+  }
+
+  private _registerEvents() {
+    this._bus.on(Events.INIT, this._init.bind(this));
+    this._bus.on(Events.RENDER, this._render.bind(this));
+    this._bus.on(Events.DID_MOUNT, this._componentDidMount.bind(this));
+    this._bus.on(Events.DID_UPDATE, this._componentDidUpdate.bind(this));
+  }
+
+  private _init() {
+    this._bus.emit(Events.RENDER);
+  }
+
+  private _render() {
+    this.removeEvents();
+
+    const fragment = this.render();
+    const newElement = fragment.firstElementChild as HTMLElement;
+
+    if (!newElement) {
+      throw new Error('Render должен возвращать непустой фрагмент');
+    }
+
+    if (this._element) {
+      this._element.replaceWith(newElement);
+    }
+    this._element = newElement;
+    this._element?.setAttribute('data-id', this._id);
+    this.addEvents();
+  }
+
+  private _componentDidMount() {
+    this.componentDidMount?.();
+
+    Object.values(this._children ?? {}).forEach(children => {
+      if (Array.isArray(children)) {
+        children.forEach((child) => child.dispatchComponentDidMount());
+      } else {
+        children.dispatchComponentDidMount();
+      }
+    });
+  }
+
+  private _componentDidUpdate() {
+    this.componentDidUpdate?.();
+    this._bus.emit(Events.RENDER);
   }
 
   private _parseProps(props: P) {
@@ -200,5 +239,23 @@ export default abstract class Component<P extends BaseProps = never> {
       children,
       primitives,
     };
+  }
+
+  private _proxyProps(props: ComponentPrimitives<P>) {
+    return new Proxy(props, {
+      get(target, prop) {
+        const value = target[prop as keyof P];
+        return typeof value === 'function' ? value.bind(target) : value;
+      },
+      set: (target, prop, value) => {
+        const oldProps = target;
+        target[prop as keyof P] = value;
+        this._bus.emit(Events.DID_UPDATE, oldProps, target);
+        return true;
+      },
+      deleteProperty() {
+        throw new Error('Нет доступа');
+      },
+    });
   }
 }
