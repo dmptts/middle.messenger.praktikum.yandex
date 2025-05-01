@@ -1,5 +1,6 @@
 @import "./styles/global.css";
 @import "./styles/components.css";
+@import "./styles/pages.css";
 
 .userpic {
     position: relative;
@@ -112,12 +113,6 @@
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-}
-
-.page-title {
-    margin: 0;
-    font-size: var(--font-size-large);
-    text-align: center;
 }
 
 .login-page__title {
@@ -259,8 +254,7 @@
     margin: 0 auto;
 }
 
-.server-error-page__container,
-.not-found-error-page__container {
+.server-error-page__container {
     justify-content: center;
     align-items: center;
     width: 510px;
@@ -268,14 +262,12 @@
     padding: 50px 30px 30px 30px;
 }
 
-.server-error-page__title,
-.not-found-error-page__title {
+.server-error-page__title {
     font-size: var(--font-size-extra-large);
     margin-bottom: 20px;
 }
 
-.server-error-page__message,
-.not-found-error-page__message {
+.server-error-page__message {
     margin-bottom: 70px;
     font-size: var(--font-size-large);
     font-weight: 500;

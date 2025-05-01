@@ -115,3 +115,9 @@ td {
         outline: none;
     }
 }
+
+.page-title {
+    margin: 0;
+    font-size: var(--font-size-large);
+    text-align: center;
+}

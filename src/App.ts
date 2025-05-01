@@ -1,3 +1,5 @@
+import Page404 from './pages/404';
+import LoginPage from './pages/login';
 import Component from './services/Component';
 import Store from './services/Store';
 import { BaseProps } from './utils/types';
@@ -37,6 +39,12 @@ export default class App extends Component<AppProps> {
 
   render() {
     const fragment = document.createElement('template');
+
+    switch (globalStorage.state.currentPage) {
+      case Pages.Login:
+      default:
+        fragment.content.appendChild(new Page404().element!);
+    }
 
     return fragment.content;
   }
