@@ -120,19 +120,6 @@
     text-align: center;
 }
 
-.temp-footer {
-    padding: 20px 60px;
-}
-
-.temp-footer ul {
-    display: flex;
-    justify-content: center;
-    column-gap: 16px;
-    padding: 0;
-    margin: 0;
-    list-style: none;
-}
-
 .login-page__title {
     margin-bottom: 40px;
 }
