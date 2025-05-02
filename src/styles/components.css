@@ -1,3 +1,6 @@
 @import "/src/components/Button/styles.css";
 @import "/src/components/Input/styles.css";
 @import "/src/components/Footer/styles.css";
+@import "src/components/Badge/styles.css";
+@import "src/components/BackButton/styles.css";
+@import "src/components/Userpic/styles.css";

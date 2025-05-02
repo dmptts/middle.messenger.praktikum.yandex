@@ -1,5 +1,6 @@
 import Page404 from './pages/404';
 import LoginPage from './pages/login';
+import ProfilePage from './pages/profile';
 import RegistrationPage from './pages/registration';
 import Component from './services/Component';
 import Store from './services/Store';
@@ -22,7 +23,7 @@ interface GlobalState {
 }
 
 export const globalStorage = new Store<GlobalState>({
-  currentPage: Pages.Registration,
+  currentPage: Pages.Profile,
 });
 
 interface AppProps extends BaseProps {
@@ -49,6 +50,8 @@ export default class App extends Component<AppProps> {
         fragment.content.appendChild(new RegistrationPage().element!);
         break;
       case Pages.Profile:
+        fragment.content.appendChild(new ProfilePage().element!);
+        break;
       case Pages.EditProfile:
       case Pages.ChangePassword:
       case Pages.ChatList:
