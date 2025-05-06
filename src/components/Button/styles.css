@@ -1,6 +1,5 @@
 .button-component {
     display: block;
-    width: 100%;
     padding: 12px 20px;
     color: var(--color-button-text);
     background-color: var(--color-primary);
@@ -34,7 +33,28 @@
     border-radius: 50%;
 }
 
+.button-component--text {
+    padding: 8px;
+    color: var(--color-text-secondary);
+    background-color: transparent;
+
+    &:hover,
+    &:focus {
+        background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    &:active {
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    &:disabled {
+        background-color: transparent;
+        cursor: not-allowed;
+    }
+}
+
 .button-component__icon {
-    width: 50%;
-    height: 50%;
+    height: 1em;
+    aspect-ratio: 1 / 1;
+    vertical-align: middle;
 }

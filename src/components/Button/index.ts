@@ -7,6 +7,7 @@ interface ButtonProps extends BaseProps {
   icon?: string;
   type?: 'button' | 'submit' | 'reset';
   shape?: 'default' | 'circle';
+  variant?: 'default' | 'text';
   className?: string;
   disabled?: boolean;
   onClick?: EventListener;
