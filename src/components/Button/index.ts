@@ -3,11 +3,13 @@ import { BaseProps } from '../../utils/types';
 import template from "./template.hbs?raw";
 
 interface ButtonProps extends BaseProps {
-  text: string;
-  onClick?: EventListener;
-  type?: 'button' | 'submit';
+  text?: string;
+  icon?: string;
+  type?: 'button' | 'submit' | 'reset';
+  shape?: 'default' | 'circle';
   className?: string;
   disabled?: boolean;
+  onClick?: EventListener;
 }
 
 export default class Button extends Component<ButtonProps> {
@@ -15,6 +17,7 @@ export default class Button extends Component<ButtonProps> {
     super({
       ...props,
       type: props.type ?? 'button',
+      shape: props.shape ?? 'default',
     });
   }
 
