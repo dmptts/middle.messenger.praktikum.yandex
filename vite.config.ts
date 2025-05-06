@@ -1,4 +1,5 @@
 import { defineConfig } from 'vite';
+import svgSpritePlugin from 'vite-plugin-svg-sprite';
 
 export default defineConfig({
   build: {
@@ -8,5 +9,12 @@ export default defineConfig({
   },
   css: {
     postcss: './postcss.config.ts',
-  }
+  },
+  plugins: [
+    svgSpritePlugin({
+      exportType: 'vanilla',
+      include: ['**/icons/*.svg'],
+      symbolId: 'icon-[name]'
+    }),
+  ],
 })
