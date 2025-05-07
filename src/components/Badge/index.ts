@@ -4,7 +4,8 @@ import template from './template.hbs?raw';
 
 interface BadgeProps extends BaseProps{
   size: number;
-  content: string;
+  text?: string;
+  icon?: string;
   className?: string;
 }
 
