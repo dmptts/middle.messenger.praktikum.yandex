@@ -1,5 +1,5 @@
 import chevronIcon from '/src/images/icons/chevron.svg';
-import { ChatPageMode, chatStorage } from '../../pages/chat';
+import { ChatPageMode, chatStorage } from '../../pages/ChatPage';
 import Component from '../../services/Component';
 import { BaseProps, ChatDto } from '../../utils/types';
 import Button from '../Button';

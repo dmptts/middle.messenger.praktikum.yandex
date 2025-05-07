@@ -1,4 +1,4 @@
-import { ChatPageMode, ChatState, chatStorage } from '../../pages/chat';
+import { ChatPageMode, ChatState, chatStorage } from '../../pages/ChatPage';
 import Component from '../../services/Component';
 import { BaseProps, ChatDto } from '../../utils/types';
 import Button from '../Button';

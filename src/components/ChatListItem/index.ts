@@ -1,4 +1,4 @@
-import { ChatState, chatStorage } from '../../pages/chat';
+import { ChatState, chatStorage } from '../../pages/ChatPage';
 import Component from '../../services/Component';
 import { BaseProps, ChatDto } from '../../utils/types';
 import Userpic from '../Userpic';
@@ -26,7 +26,7 @@ export default class ChatListItem extends Component<InternalChatListItemProps> {
       userpic: new Userpic({
         size: 47,
         src: props.chat.avatar,
-        className: 'chat-list-item__userpic'
+        className: 'ChatPage-list-item__userpic'
       }),
       onClick: props.onClick,
       title: props.chat.title,

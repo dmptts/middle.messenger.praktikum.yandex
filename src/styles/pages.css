@@ -1,5 +1,6 @@
-@import "/src/pages/login/styles.css";
-@import "/src/pages/registration/styles.css";
-@import "/src/pages/profile/styles.css";
-@import "/src/pages/chat/styles.css";
-@import "/src/pages/404/styles.css";
+@import "/src/pages/LoginPage/styles.css";
+@import "/src/pages/RegistrationPage/styles.css";
+@import "/src/pages/ProfilePage/styles.css";
+@import "/src/pages/ChatPage/styles.css";
+@import "/src/pages/NotFoundErrorPage/styles.css";
+@import "/src/pages/ServerErrorPage/styles.css";

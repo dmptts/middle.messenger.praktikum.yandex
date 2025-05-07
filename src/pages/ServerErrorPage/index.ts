@@ -5,12 +5,12 @@ import Component from '../../services/Component';
 import { BaseProps } from '../../utils/types';
 import template from './template.hbs?raw';
 
-interface Page404Props extends BaseProps{
+interface ServerErrorPageProps extends BaseProps {
   footer: Footer;
   link: Link;
 }
 
-export default class Page404 extends Component<Page404Props> {
+export default class ServerErrorPage extends Component<ServerErrorPageProps> {
   constructor() {
     super({
       footer: new Footer(),
@@ -19,13 +19,13 @@ export default class Page404 extends Component<Page404Props> {
         onClick: () => {
           globalStorage.state = {
             currentPage: Pages.ChatList,
-          }
-        }
+          };
+        },
       }),
     });
   }
 
-  render() {
+  protected render() {
     return this.compile(template);
   }
 }
