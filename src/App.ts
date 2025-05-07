@@ -1,3 +1,4 @@
+import { ChatPage } from './pages';
 import Page404 from './pages/404';
 import LoginPage from './pages/login';
 import ProfilePage from './pages/profile';
@@ -23,17 +24,19 @@ interface GlobalState {
 }
 
 export const globalStorage = new Store<GlobalState>({
-  currentPage: Pages.Profile,
+  currentPage: Pages.Login,
 });
 
 interface AppProps extends BaseProps {
   currentPage: Pages;
+  chatPage: ChatPage;
 }
 
 export default class App extends Component<AppProps> {
   constructor() {
     super({
       currentPage: globalStorage.state.currentPage,
+      chatPage: new ChatPage(),
     });
 
     globalStorage.subscribe(this._handleStateChange.bind(this));
@@ -41,6 +44,10 @@ export default class App extends Component<AppProps> {
 
   render() {
     const fragment = document.createElement('template');
+
+    if (!this.props) {
+      throw new Error();
+    }
 
     switch (globalStorage.state.currentPage) {
       case Pages.Login:
@@ -54,8 +61,9 @@ export default class App extends Component<AppProps> {
         break;
       case Pages.EditProfile:
       case Pages.ChangePassword:
-      case Pages.ChatList:
       case Pages.Chat:
+        fragment.content.appendChild(this.props.chatPage.element!);
+        break;
       case Pages.ServerError:
       default:
         fragment.content.appendChild(new Page404().element!);

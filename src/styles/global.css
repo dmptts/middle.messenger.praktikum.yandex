@@ -116,6 +116,15 @@ td {
     }
 }
 
+q {
+    quotes: none;
+}
+
+q::before,
+q::after {
+    content: '';
+}
+
 .page {
     display: flex;
     flex-direction: column;

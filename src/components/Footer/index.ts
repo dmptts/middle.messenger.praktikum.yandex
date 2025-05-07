@@ -26,12 +26,6 @@ export default class Footer extends Component<FooterProps> {
           }
         }),
         new Link({
-          text: 'Список чатов',
-          onClick: () => globalStorage.state = {
-            currentPage: Pages.ChatList
-          }
-        }),
-        new Link({
           text: 'Чат',
           onClick: () => globalStorage.state = {
             currentPage: Pages.Chat

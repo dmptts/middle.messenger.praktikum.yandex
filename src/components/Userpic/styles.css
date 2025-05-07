@@ -42,8 +42,8 @@
 }
 
 .userpic__placeholder {
-    width: 40px;
-    height: 40px;
-    background: url("/src/images/icon-image-placeholder.svg") no-repeat center;
+    width: 33%;
+    height: 33%;
+    background: url("/src/images/icons/image-placeholder.svg") no-repeat center;
     background-size: contain;
 }
