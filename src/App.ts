@@ -1,4 +1,13 @@
-import { ChatPage, LoginPage, NotFoundErrorPage, ProfilePage, RegistrationPage, ServerErrorPage } from './pages';
+import {
+  ChangePasswordPage,
+  ChatPage,
+  EditProfilePage,
+  LoginPage,
+  NotFoundErrorPage,
+  ProfilePage,
+  RegistrationPage,
+  ServerErrorPage,
+} from './pages';
 import Component from './services/Component';
 import Store from './services/Store';
 import { BaseProps } from './utils/types';
@@ -20,7 +29,7 @@ interface GlobalState {
 }
 
 export const globalStorage = new Store<GlobalState>({
-  currentPage: Pages.Login,
+  currentPage: Pages.ChangePassword,
 });
 
 interface AppProps extends BaseProps {
@@ -29,6 +38,8 @@ interface AppProps extends BaseProps {
   registrationPage: RegistrationPage;
   chatPage: ChatPage;
   profilePage: ProfilePage;
+  editProfilePage: EditProfilePage;
+  changePasswordPage: ChangePasswordPage;
   notFoundErrorPage: NotFoundErrorPage;
   serverErrorPage: ServerErrorPage;
 }
@@ -40,6 +51,8 @@ export default class App extends Component<AppProps> {
       loginPage: new LoginPage(),
       registrationPage: new RegistrationPage(),
       profilePage: new ProfilePage(),
+      editProfilePage: new EditProfilePage(),
+      changePasswordPage: new ChangePasswordPage(),
       chatPage: new ChatPage(),
       notFoundErrorPage: new NotFoundErrorPage(),
       serverErrorPage: new ServerErrorPage(),
@@ -66,7 +79,11 @@ export default class App extends Component<AppProps> {
         fragment.content.appendChild(this.props.profilePage.element!);
         break;
       case Pages.EditProfile:
+        fragment.content.appendChild(this.props.editProfilePage.element!);
+        break;
       case Pages.ChangePassword:
+        fragment.content.appendChild(this.props.changePasswordPage.element!);
+        break;
       case Pages.Chat:
         fragment.content.appendChild(this.props.chatPage.element!);
         break;

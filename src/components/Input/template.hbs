@@ -1,7 +1,9 @@
-<div class="input-component">
-  {{#if label}}
-    <label for="{{id}}" class="input-component__label">{{label}}</label>
-  {{/if}}
-  <input type="{{type}}" name="{{name}}" id="{{id}}" value="{{value}}" class="input-component__input">
+<div class="input-component {{#ifEquals labelPosition 'left' }}input-component--label-left{{/ifEquals}} {{className}}">
+  <div class="input-component__wrapper">
+    {{#if label}}
+      <label for="{{id}}" class="input-component__label">{{label}}</label>
+    {{/if}}
+    <input type="{{type}}" name="{{name}}" id="{{id}}" value="{{value}}" class="input-component__input"{{#if disabled}} disabled{{/if}}>
+  </div>
   <div class="input-component__error">{{error}}</div>
 </div>

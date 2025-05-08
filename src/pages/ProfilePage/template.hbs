@@ -2,47 +2,12 @@
   <main>
     <div class="container profile-page__container">
       {{{userpic}}}
-      <table class="profile-page__data-table">
-        <tr>
-          <th>Почта</th>
-          <td>pochta@yandex.ru</td>
-        </tr>
-        <tr>
-          <th>Логин</th>
-          <td>ivanivanov</td>
-        </tr>
-        <tr>
-          <th>Имя</th>
-          <td>Иван</td>
-        </tr>
-        <tr>
-          <th>Фамилия</th>
-          <td>Иванов</td>
-        </tr>
-        <tr>
-          <th>Имя в чате</th>
-          <td>Иван</td>
-        </tr>
-        <tr>
-          <th>Телефон</th>
-          <td>+7 (909) 967 30 30</td>
-        </tr>
-      </table>
-
-      <table class="profile-page__links-table">
-        <tbody>
-        <tr>
-          <td>{{{editProfileLink}}}</td>
-        </tr>
-        <tr>
-          <td>{{{changePasswordLink}}}</td>
-        </tr>
-        <tr>
-          <td>{{{quitLink}}}</td>
-        </tr>
-        </tbody>
-      </table>
-
+      {{{form}}}
+      <ul class="profile-page__links">
+        <li>{{{editProfileLink}}}</li>
+        <li>{{{changePasswordLink}}}</li>
+        <li>{{{quitLink}}}</li>
+      </ul>
       {{{backButton}}}
     </div>
   </main>

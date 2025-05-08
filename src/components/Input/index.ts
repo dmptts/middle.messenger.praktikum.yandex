@@ -7,11 +7,14 @@ interface InputProps extends BaseProps {
   name: string;
   id?: string;
   label?: string;
+  labelPosition?: 'top' | 'left';
   value?: string;
   required?: boolean;
+  disabled?: boolean;
   onBlur?: EventListener;
   onClick?: EventListener;
   validation?: (value: string) => Nullable<string>;
+  className?: string;
 }
 
 export default class Input extends Component<InputProps> {

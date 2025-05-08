@@ -1,27 +1,28 @@
 import Component from '../../services/Component';
-import { BaseProps } from '../../utils/types';
+import { BaseProps, Nullable } from '../../utils/types';
 import Button from '../Button';
 import Input from '../Input';
 import template from './template.hbs?raw';
 
 interface FormProps extends BaseProps {
   body: Component<BaseProps>[];
-  buttonText: string;
+  buttonText?: string;
   className?: string;
 }
 
 interface InternalFormProps extends BaseProps {
   body: Component<BaseProps>[];
-  button: Button;
+  button: Nullable<Button>;
   className?: string;
 }
 
 export default class Form extends Component<InternalFormProps> {
   constructor(props: FormProps) {
-    const submitButton = new Button({
+    const submitButton = props.buttonText ? new Button({
       text: props.buttonText,
       type: 'submit',
-    });
+      className: props.className ? `${props.className}-submit` : '',
+    }) : null;
 
     super({
       body: props.body,
