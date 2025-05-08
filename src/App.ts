@@ -29,7 +29,7 @@ interface GlobalState {
 }
 
 export const globalStorage = new Store<GlobalState>({
-  currentPage: Pages.ChangePassword,
+  currentPage: Pages.Login,
 });
 
 interface AppProps extends BaseProps {
