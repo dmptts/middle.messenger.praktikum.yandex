@@ -1,0 +1,13 @@
+.edit-profile-page__form {
+    display: flex;
+    flex-direction: column;
+}
+
+.edit-profile-page__form-body {
+    margin-bottom: 60px;
+}
+
+.edit-profile-page__form-submit {
+    align-self: center;
+    width: 280px;
+}

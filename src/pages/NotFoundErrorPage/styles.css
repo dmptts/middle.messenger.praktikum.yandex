@@ -1,0 +1,18 @@
+.not-found-error-page__container {
+    justify-content: center;
+    align-items: center;
+    width: 510px;
+    margin: 0 auto;
+    padding: 50px 30px 30px;
+}
+
+.not-found-error-page__title {
+    font-size: var(--font-size-extra-large);
+    margin-bottom: 20px;
+}
+
+.not-found-error-page__message {
+    margin-bottom: 70px;
+    font-size: var(--font-size-large);
+    font-weight: 500;
+}

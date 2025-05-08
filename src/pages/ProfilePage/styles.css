@@ -1,0 +1,32 @@
+.profile-page__container {
+    justify-content: center;
+    align-items: center;
+    width: 510px;
+    margin: 0 auto;
+    padding: 50px 30px 30px;
+}
+
+.profile-page__form {
+    width: 100%;
+    margin-bottom: 60px;
+}
+
+.profile-page__links {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.profile-page__links li {
+    padding: 10px 0;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.profile-page__userpic {
+    margin-bottom: 90px;
+}
+
+.profile-page__quit-button {
+    color: var(--color-accent);
+}

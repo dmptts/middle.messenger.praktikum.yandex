@@ -1,0 +1,12 @@
+.message-input {
+    height: auto;
+    padding: 10px 20px;
+    font-family: var(--font-family-default);
+    font-size: var(--font-size-base);
+    background-color: var(--color-grey);
+    border: none;
+    border-radius: 20px;
+    outline: none;
+    resize: none;
+    overflow: hidden;
+}
