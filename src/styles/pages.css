@@ -1,8 +1,8 @@
-@import "/src/pages/LoginPage/styles.css";
-@import "/src/pages/RegistrationPage/styles.css";
-@import "/src/pages/ProfilePage/styles.css";
-@import "/src/pages/EditProfilePage/styles.css";
-@import "/src/pages/ChangePasswordPage/styles.css";
-@import "/src/pages/ChatPage/styles.css";
-@import "/src/pages/NotFoundErrorPage/styles.css";
-@import "/src/pages/ServerErrorPage/styles.css";
+@import url("/src/pages/LoginPage/styles.css");
+@import url("/src/pages/RegistrationPage/styles.css");
+@import url("/src/pages/ProfilePage/styles.css");
+@import url("/src/pages/EditProfilePage/styles.css");
+@import url("/src/pages/ChangePasswordPage/styles.css");
+@import url("/src/pages/ChatPage/styles.css");
+@import url("/src/pages/NotFoundErrorPage/styles.css");
+@import url("/src/pages/ServerErrorPage/styles.css");

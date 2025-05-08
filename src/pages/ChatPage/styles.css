@@ -7,7 +7,7 @@
     flex-shrink: 0;
     width: 310px;
 
-    @media (max-width: 767px) {
+    @media (width <= 767px) {
         width: 100%;
     }
 }

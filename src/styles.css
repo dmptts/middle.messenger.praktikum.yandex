@@ -1,6 +1,6 @@
-@import "./styles/global.css";
-@import "./styles/components.css";
-@import "./styles/pages.css";
+@import url("./styles/global.css");
+@import url("./styles/components.css");
+@import url("./styles/pages.css");
 
 .edit-profile-page__container,
 .change-password-page__container {
@@ -8,7 +8,7 @@
     align-items: center;
     width: 510px;
     margin: 0 auto;
-    padding: 50px 30px 30px 30px;
+    padding: 50px 30px 30px;
 }
 
 .edit-profile-page__userpic,

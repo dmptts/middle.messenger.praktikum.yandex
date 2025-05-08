@@ -7,9 +7,9 @@
 }
 
 .input-component--label-left .input-component__wrapper {
-    display: flex;
-    align-items: center;
-    column-gap: 10px;
+  display: flex;
+  align-items: center;
+  column-gap: 10px;
 }
 
 .input-component__label {
@@ -25,20 +25,22 @@
     background-color: transparent;
     border: none;
     outline: none;
+}
 
-    &:disabled {
-        color: var(--color-text-secondary);
-    }
 
-    &:hover:disabled,
-    &:focus:disabled {
-        cursor: default;
-    }
+.input-component__input:disabled {
+  color: var(--color-text-secondary);
 }
 
 .input-component--label-left .input-component__input {
-    text-align: right;
+  text-align: right;
 }
+
+.input-component__input:hover:disabled,
+.input-component__input:focus:disabled {
+  cursor: default;
+}
+
 
 .input-component__error {
     padding-top: 7px;
