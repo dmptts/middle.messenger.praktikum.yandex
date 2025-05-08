@@ -20,7 +20,6 @@ export const enum Pages {
   ChangePassword = 'ChangePassword',
   NotFoundError = 'NotFoundError',
   ServerError = 'ServerError',
-  ChatList = 'ChatList',
   Chat = 'Chat',
 }
 

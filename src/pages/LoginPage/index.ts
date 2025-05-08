@@ -6,6 +6,7 @@ import Component from '../../services/Component';
 import { BaseProps } from '../../utils/types';
 import { validateLogin, validatePassword } from '../../utils/validation';
 import template from './template.hbs?raw';
+import {globalStorage, Pages} from "../../App";
 
 interface InternalLoginPageProps extends BaseProps {
   loginForm: Form;
@@ -45,6 +46,9 @@ export default class LoginPage extends Component<InternalLoginPageProps> {
     const link = new Link({
       text: 'Нет аккаунта?',
       className: 'login-page__registration-link',
+      onClick: () => globalStorage.state = {
+        currentPage: Pages.Registration,
+      },
     })
 
     const footer = new Footer()

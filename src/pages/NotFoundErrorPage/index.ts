@@ -18,7 +18,7 @@ export default class NotFoundErrorPage extends Component<NotFoundErrorPageProps>
         text: 'Назад к чатам',
         onClick: () => {
           globalStorage.state = {
-            currentPage: Pages.ChatList,
+            currentPage: Pages.Chat,
           };
         },
       }),

@@ -5,6 +5,7 @@ import { BaseProps, ChatDto } from '../../utils/types';
 import Button from '../Button';
 import ChatListItem from '../ChatListItem';
 import template from './template.hbs?raw';
+import {globalStorage, Pages} from "../../App";
 
 interface ChatListProps extends BaseProps {
   list: ChatDto[];
@@ -22,6 +23,11 @@ export default class ChatList extends Component<InternalChatListProps> {
       text: 'Профиль',
       variant: 'text',
       icon: chevronIcon,
+      onClick: () => {
+        globalStorage.state = {
+          currentPage: Pages.Profile,
+        }
+      }
     });
     const list = props.list.map(chat => (new ChatListItem({
       chat,

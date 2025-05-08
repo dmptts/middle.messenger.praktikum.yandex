@@ -18,7 +18,7 @@ export default class ServerErrorPage extends Component<ServerErrorPageProps> {
         text: 'Назад к чатам',
         onClick: () => {
           globalStorage.state = {
-            currentPage: Pages.ChatList,
+            currentPage: Pages.Chat,
           };
         },
       }),
