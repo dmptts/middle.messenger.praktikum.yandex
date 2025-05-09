@@ -1,0 +1,10 @@
+<div class="badge{{#if className}} {{className}}{{/if}}" style="width: {{size}}px;height: {{size}}px;">
+  {{#if text}}
+    {{text}}
+  {{/if}}
+  {{#if icon}}
+    <svg class="badge__icon{{#if className}} {{className}}-icon{{/if}}">
+      <use href="#{{icon}}"></use>
+    </svg>
+  {{/if}}
+</div>

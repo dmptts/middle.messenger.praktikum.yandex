@@ -1,0 +1,8 @@
+@import url("/src/pages/LoginPage/styles.css");
+@import url("/src/pages/RegistrationPage/styles.css");
+@import url("/src/pages/ProfilePage/styles.css");
+@import url("/src/pages/EditProfilePage/styles.css");
+@import url("/src/pages/ChangePasswordPage/styles.css");
+@import url("/src/pages/ChatPage/styles.css");
+@import url("/src/pages/NotFoundErrorPage/styles.css");
+@import url("/src/pages/ServerErrorPage/styles.css");

@@ -1,0 +1,12 @@
+<button
+    type="{{type}}"
+    class="button-component{{#ifEquals shape 'circle'}} button-component--circle{{/ifEquals}} {{#ifEquals variant 'text'}} button-component--text{{/ifEquals}} {{className}}"
+    {{#if disabled}}disabled{{/if}}
+>
+  {{text}}
+  {{#if icon}}
+    <svg class="button-component__icon{{#if className}} {{className}}-icon{{/if}}">
+      <use href="#{{icon}}"></use>
+    </svg>
+  {{/if}}
+</button>

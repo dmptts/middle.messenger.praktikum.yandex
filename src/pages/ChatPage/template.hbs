@@ -1,0 +1,16 @@
+<div class="page chat-page">
+  <main>
+    <div class="container chat-page__container">
+      {{#if isDesktop}}
+        {{{list}}}
+        {{{chat}}}
+      {{/if}}
+      {{#if isChatList}}
+        {{{list}}}
+      {{/if}}
+      {{#if isChat}}
+        {{{chat}}}
+      {{/if}}
+    </div>
+  </main>
+</div>

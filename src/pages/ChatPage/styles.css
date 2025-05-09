@@ -1,0 +1,18 @@
+.chat-page__container {
+    flex-direction: row;
+}
+
+.chat-page__list {
+    flex-grow: 1;
+    flex-shrink: 0;
+    width: 310px;
+
+    @media (width <= 767px) {
+        width: 100%;
+    }
+}
+
+.chat-page__chat {
+    flex-grow: 1;
+    width: 100%;
+}

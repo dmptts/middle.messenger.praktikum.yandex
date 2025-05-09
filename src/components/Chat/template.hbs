@@ -1,0 +1,23 @@
+<div class="chat {{className}}">
+  {{#if chat}}
+    <header class="chat__header">
+      {{#if isMobile}}
+        {{{backButton}}}
+      {{/if}}
+      {{{userpic}}}
+      <h2 class="chat__title">{{chat.title}}</h2>
+    </header>
+    <main class="chat__content">
+      <div class="chat__message">{{chat.last_message.content}}</div>
+
+    </main>
+    <footer class="chat__footer">
+      <form  class="chat__message-form">
+        {{{messageInput}}}
+        {{{submitButton}}}
+      </form>
+    </footer>
+  {{else}}
+    <div class="chat__placeholder"><span>Выберите чат, чтобы отправить сообщение</span></div>
+  {{/if}}
+</div>

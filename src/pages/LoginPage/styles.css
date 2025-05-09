@@ -1,0 +1,29 @@
+.login-page__title {
+    margin-bottom: 40px;
+}
+
+.login-page__container {
+    justify-content: center;
+    width: 340px;
+    height: 460px;
+    margin: 0 auto;
+    padding: 50px 30px 30px;
+}
+
+.login-page__form {
+    margin-bottom: 14px;
+}
+
+.login-page__registration-link {
+    align-self: center;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    row-gap: 16px;
+}
+
+.login-form__submit-button {
+    margin-top: 60px;
+}
