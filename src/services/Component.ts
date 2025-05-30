@@ -18,30 +18,31 @@ enum Events {
   DID_UPDATE = 'FLOW_DID_UPDATE',
 }
 
-type EventListeners<P> = {
+type EventListeners = {
   [Events.INIT]: [];
   [Events.DID_MOUNT]: [];
   [Events.RENDER]: [];
-  [Events.DID_UPDATE]: [oldProps: ComponentPrimitives<P>, props: ComponentPrimitives<P>];
+  [Events.DID_UPDATE]: [oldData: Record<string, unknown> | object, data: Record<string, unknown> | object];
 }
 
 type ComponentEvents<P> = Record<keyof P, EventListener>;
 type ComponentChildren<P> = Record<keyof P, Component<BaseProps> | Component<BaseProps>[]>;
 type ComponentPrimitives<P> = Record<keyof P, string | number | boolean | null | unknown>;
 
-export default abstract class Component<P extends BaseProps = never> {
+export default abstract class Component<P extends BaseProps = never, S extends object = never> {
   protected _listeners: Nullable<ComponentEvents<P>>;
   protected _children: Nullable<ComponentChildren<P>>;
   protected _primitives: Nullable<ComponentPrimitives<P>>;
   protected _element: Nullable<HTMLElement>;
   private readonly _id: string;
   private _props: Nullable<P>;
-  private _bus: EventBus<EventListeners<P>>;
+  private _bus: EventBus<EventListeners>;
 
   protected constructor(props?: P) {
     this._id = nanoid();
     this._bus = new EventBus();
     this._props = null;
+    this._state = null;
     this._listeners = null;
     this._children = null;
     this._primitives = null;
@@ -52,15 +53,21 @@ export default abstract class Component<P extends BaseProps = never> {
       const { listeners, children, primitives } = this._parseProps(this._props);
       this._listeners = listeners;
       this._children = children;
-      this._primitives = this._proxyProps(primitives);
+      this._primitives = this._proxyData(primitives);
     }
 
     this._registerEvents();
     this._bus.emit(Events.INIT);
   }
 
+  private _state: Nullable<S>;
+
   get props(): Nullable<P> {
     return this._props;
+  }
+
+  get state(): Nullable<S> {
+    return this._state;
   }
 
   set props(props: Partial<P>) {
@@ -75,7 +82,23 @@ export default abstract class Component<P extends BaseProps = never> {
         this._primitives[key] = primitives[key];
       }
     } else {
-      this._primitives = this._proxyProps(primitives);
+      this._primitives = this._proxyData(primitives);
+    }
+  }
+
+  setState(update: Partial<S> | ((prevState: Nullable<S>) => Partial<S>)) {
+    const nextState = typeof update === 'function' ? update(this._state) : update;
+
+    if (this._state) {
+      for (const key in nextState) {
+        const value = nextState[key];
+        if (value !== undefined) {
+          this._state[key] = value;
+        }
+      }
+    } else {
+      this._state = this._proxyData(nextState as S);
+      this._bus.emit(Events.DID_UPDATE, {}, nextState);
     }
   }
 
@@ -93,12 +116,14 @@ export default abstract class Component<P extends BaseProps = never> {
 
   protected componentDidUpdate?(): void;
 
-  protected compile(template: string) {
+  protected compile(template: string, children?: ComponentChildren<P>) {
+    // console.log(this.constructor.name)
     const stubs = {} as Record<keyof P, string | string[]>;
+    const allChildren = { ...this._children, ...children };
     const fragment = document.createElement('template');
 
-    if (this._children) {
-      Object.entries(this._children).forEach(([key, child]) => {
+    if (allChildren) {
+      Object.entries(allChildren).forEach(([key, child]) => {
         if (Array.isArray(child)) {
           stubs[key as keyof P] = child
             .map((component) => `<div data-id="${component._id}"></div>`)
@@ -109,10 +134,10 @@ export default abstract class Component<P extends BaseProps = never> {
       });
     }
 
-    fragment.innerHTML = Handlebars.compile(template)(Object.assign({}, this._primitives, stubs));
+    fragment.innerHTML = Handlebars.compile(template)(Object.assign({}, { ...this._primitives, ...this._state }, stubs));
 
-    if (this._children) {
-      Object.values(this._children).forEach((child) => {
+    if (allChildren) {
+      Object.values(allChildren).forEach((child) => {
         if (Array.isArray(child)) {
           const stubs = child
             .map((component) => fragment.content.querySelector(`[data-id="${component._id}"]`))
@@ -241,16 +266,16 @@ export default abstract class Component<P extends BaseProps = never> {
     };
   }
 
-  private _proxyProps(props: ComponentPrimitives<P>) {
-    return new Proxy(props, {
-      get(target, prop) {
-        const value = target[prop as keyof P];
+  private _proxyData<T extends S | ComponentPrimitives<P>>(data: T): T {
+    return new Proxy(data, {
+      get(target, key) {
+        const value = target[key as keyof T];
         return typeof value === 'function' ? value.bind(target) : value;
       },
-      set: (target, prop, value) => {
-        const oldProps = target;
-        target[prop as keyof P] = value;
-        this._bus.emit(Events.DID_UPDATE, oldProps, target);
+      set: (target, key, value) => {
+        const oldData = { ...target };
+        target[key as keyof T] = value;
+        this._bus.emit(Events.DID_UPDATE, oldData, target);
         return true;
       },
       deleteProperty() {

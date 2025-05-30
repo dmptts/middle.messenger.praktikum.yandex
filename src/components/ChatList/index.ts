@@ -1,47 +1,44 @@
 import chevronIcon from '/src/images/icons/chevron.svg';
-import { ChatPageMode, chatStorage } from '../../pages/ChatPage';
 import Component from '../../services/Component';
-import { BaseProps, ChatDto } from '../../utils/types';
+import { BaseProps, ChatDto, StateSetter } from '../../utils/types';
 import Button from '../Button';
 import ChatListItem from '../ChatListItem';
 import template from './template.hbs?raw';
-import {globalStorage, Pages} from "../../App";
+import { globalStorage, Pages } from "../../App";
+import { ChatPageMode, ChatState } from "../../pages/ChatPage";
 
 interface ChatListProps extends BaseProps {
   list: ChatDto[];
+  setPageState?: StateSetter<ChatState>;
   className?: string;
 }
 
-interface InternalChatListProps extends BaseProps {
-  list: ChatListItem[];
-  className?: string;
-}
-
-export default class ChatList extends Component<InternalChatListProps> {
+export default class ChatList extends Component<ChatListProps> {
   constructor(props: ChatListProps) {
-    const profileButton = new Button({
-      text: 'Профиль',
-      variant: 'text',
-      icon: chevronIcon,
-      onClick: () => {
-        globalStorage.state = {
-          currentPage: Pages.Profile,
-        }
-      }
-    });
-    const list = props.list.map(chat => (new ChatListItem({
-      chat,
-      onClick: () => {
-        chatStorage.state = {
-          selectedChat: chat.id,
-          mode: chatStorage.state.mode !== ChatPageMode.ChatListAndChat ? ChatPageMode.Chat : ChatPageMode.ChatListAndChat,
-        };
-      },
-    })));
-    super({ ...props, profileButton, list });
+    super(props);
   }
 
   protected render(): DocumentFragment {
-    return this.compile(template);
+    return this.compile(template, {
+      profileButton: new Button({
+        text: 'Профиль',
+        variant: 'text',
+        icon: chevronIcon,
+        onClick: () => {
+          globalStorage.state = {
+            currentPage: Pages.Profile,
+          }
+        }
+      }),
+      list: this.props?.list.map(chat => (new ChatListItem({
+        chat,
+        onClick: () => {
+          this.props?.setPageState?.((prev) => ({
+            selectedChat: chat.id,
+            mode: prev?.mode !== ChatPageMode.All ? ChatPageMode.Chat : ChatPageMode.All,
+          }));
+        },
+      }))) ?? [],
+    });
   }
 }

@@ -1,44 +1,41 @@
-import { ChatPageMode, ChatState, chatStorage } from '../../pages/ChatPage';
 import Component from '../../services/Component';
-import { BaseProps, ChatDto } from '../../utils/types';
+import { BaseProps, ChatDto, Nullable, StateSetter } from '../../utils/types';
 import Button from '../Button';
 import MessageInput from '../MessageInput';
 import Userpic from '../Userpic';
 import template from './template.hbs?raw';
 import arrowIcon from '/src/images/icons/arrow.svg';
 import chevronIcon from '/src/images/icons/chevron.svg';
+import { ChatPageMode, ChatState } from "../../pages/ChatPage";
 
 interface ChatProps extends BaseProps {
-  chat?: ChatDto;
+  chat?: Nullable<ChatDto>;
   isMobile?: boolean;
+  setPageState?: StateSetter<ChatState>;
   className?: string;
 }
 
 export default class Chat extends Component<ChatProps> {
   constructor(props: ChatProps) {
-    super({
-      ...props,
+    super(props);
+  }
+
+  render() {
+    return this.compile(template, {
       userpic: new Userpic({
         src: '',
         size: 34,
-      }),
-      button: new Button({
-        text: 'Назад',
-        onClick: () => {
-          chatStorage.state = {
-            selectedChat: null,
-            mode: ChatPageMode.ChatList,
-          };
-        },
       }),
       backButton: new Button({
         icon: chevronIcon,
         variant: 'text',
         className: 'chat__back-button',
-        onClick: () => chatStorage.state = {
-          selectedChat: null,
-          mode: ChatPageMode.ChatList,
-        }
+        onClick: () => {
+          this.props?.setPageState?.({
+            selectedChat: null,
+            mode: ChatPageMode.ChatList,
+          })
+        },
       }),
       messageInput: new MessageInput({
         className: 'chat__message-input',
@@ -50,17 +47,5 @@ export default class Chat extends Component<ChatProps> {
         className: 'chat__submit-button',
       })
     });
-
-    chatStorage.subscribe(this._handleStateChange.bind(this));
-  }
-
-  render() {
-    return this.compile(template);
-  }
-
-  private _handleStateChange(state: ChatState) {
-    this.props = {
-      isMobile: state.mode !== ChatPageMode.ChatListAndChat,
-    }
   }
 }

@@ -1,16 +1,16 @@
 <div class="page chat-page">
   <main>
     <div class="container chat-page__container">
-      {{#if isDesktop}}
+      {{#ifEquals mode "ALL"}}
         {{{list}}}
         {{{chat}}}
-      {{/if}}
-      {{#if isChatList}}
+      {{/ifEquals}}
+      {{#ifEquals mode "CHAT_LIST"}}
         {{{list}}}
-      {{/if}}
-      {{#if isChat}}
+      {{/ifEquals}}
+      {{#ifEquals mode "CHAT"}}
         {{{chat}}}
-      {{/if}}
+      {{/ifEquals}}
     </div>
   </main>
 </div>
