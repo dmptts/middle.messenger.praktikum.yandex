@@ -1,5 +1,4 @@
 import BackButton from '../../components/BackButton';
-import Footer from '../../components/Footer';
 import Form from '../../components/Form';
 import Input from '../../components/Input';
 import Userpic from '../../components/Userpic';
@@ -12,7 +11,6 @@ interface ChangePasswordPageProps extends BaseProps {
   userpic: Userpic;
   form: Form;
   backButton: BackButton;
-  footer: Footer;
 }
 
 export default class ChangePasswordPage extends Component<ChangePasswordPageProps> {
@@ -61,7 +59,6 @@ export default class ChangePasswordPage extends Component<ChangePasswordPageProp
         buttonText: 'Сохранить',
         className: 'change-password-page__form',
       }),
-      footer: new Footer(),
     });
   }
 

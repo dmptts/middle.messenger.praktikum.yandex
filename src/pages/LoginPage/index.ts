@@ -1,4 +1,3 @@
-import Footer from '../../components/Footer';
 import Form from '../../components/Form';
 import Input from '../../components/Input';
 import Link from '../../components/Link';
@@ -6,12 +5,11 @@ import Component from '../../services/Component';
 import { BaseProps } from '../../utils/types';
 import { validateLogin, validatePassword } from '../../utils/validation';
 import template from './template.hbs?raw';
-import {globalStorage, Pages} from "../../App";
+import { Routes } from "../../App";
 
 interface InternalLoginPageProps extends BaseProps {
   loginForm: Form;
   link: Link;
-  footer: Footer;
 }
 
 export default class LoginPage extends Component<InternalLoginPageProps> {
@@ -45,18 +43,13 @@ export default class LoginPage extends Component<InternalLoginPageProps> {
 
     const link = new Link({
       text: 'Нет аккаунта?',
+      to: Routes.SignUp,
       className: 'login-page__registration-link',
-      onClick: () => globalStorage.state = {
-        currentPage: Pages.Registration,
-      },
     })
-
-    const footer = new Footer()
 
     super({
       loginForm,
       link,
-      footer
     });
   }
 

@@ -1,1 +1,5 @@
-<a {{#if id}}id="{{ id }}"{{/if}} {{#if className}} class="{{className}}" {{/if}} href="#">{{ text }}</a>
+{{#if component}}
+  {{{component}}}
+{{else}}
+  <a {{#if id}}id="{{ id }}"{{/if}} {{#if className}} class="{{className}}" {{/if}} href="#">{{ text }}</a>
+{{/if}}

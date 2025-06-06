@@ -1,5 +1,4 @@
 import BackButton from '../../components/BackButton';
-import Footer from '../../components/Footer';
 import Form from '../../components/Form';
 import Input from '../../components/Input';
 import Userpic from '../../components/Userpic';
@@ -12,7 +11,6 @@ interface EditProfilePageProps extends BaseProps {
   userpic: Userpic;
   backButton: BackButton;
   form: Form;
-  footer: Footer;
 }
 
 export default class EditProfilePage extends Component<EditProfilePageProps> {
@@ -100,7 +98,6 @@ export default class EditProfilePage extends Component<EditProfilePageProps> {
         buttonText: 'Сохранить',
         className: 'edit-profile-page__form',
       }),
-      footer: new Footer(),
     });
   }
 

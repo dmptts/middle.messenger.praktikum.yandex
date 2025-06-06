@@ -1,11 +1,12 @@
 import chevronIcon from '/src/images/icons/chevron.svg';
 import Component from '../../services/Component';
 import { BaseProps, ChatDto, StateSetter } from '../../utils/types';
-import Button from '../Button';
 import ChatListItem from '../ChatListItem';
 import template from './template.hbs?raw';
-import { globalStorage, Pages } from "../../App";
 import { ChatPageMode, ChatState } from "../../pages/ChatPage";
+import Link from "../Link";
+import Button from "../Button";
+import { Routes } from "../../App";
 
 interface ChatListProps extends BaseProps {
   list: ChatDto[];
@@ -20,15 +21,13 @@ export default class ChatList extends Component<ChatListProps> {
 
   protected render(): DocumentFragment {
     return this.compile(template, {
-      profileButton: new Button({
-        text: 'Профиль',
-        variant: 'text',
-        icon: chevronIcon,
-        onClick: () => {
-          globalStorage.state = {
-            currentPage: Pages.Profile,
-          }
-        }
+      profileButton: new Link({
+        component: new Button({
+          text: 'Профиль',
+          variant: 'text',
+          icon: chevronIcon,
+        }),
+        to: Routes.Settings,
       }),
       list: this.props?.list.map(chat => (new ChatListItem({
         chat,

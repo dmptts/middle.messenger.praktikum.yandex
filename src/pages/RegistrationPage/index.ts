@@ -1,5 +1,3 @@
-import { globalStorage, Pages } from '../../App';
-import Footer from '../../components/Footer';
 import Form from '../../components/Form';
 import Input from '../../components/Input';
 import Link from '../../components/Link';
@@ -16,7 +14,8 @@ import {
 import template from './template.hbs?raw';
 
 interface RegistrationPageProps extends BaseProps {
-  footer: Footer;
+  form: Form;
+  link: Link;
 }
 
 export default class RegistrationPage extends Component<RegistrationPageProps> {
@@ -100,11 +99,8 @@ export default class RegistrationPage extends Component<RegistrationPageProps> {
       link: new Link({
         text: 'Войти',
         className: 'registration-page__login-link',
-        onClick: () => globalStorage.state = {
-          currentPage: Pages.Login,
-        },
+        to: '/',
       }),
-      footer: new Footer(),
     });
   }
 

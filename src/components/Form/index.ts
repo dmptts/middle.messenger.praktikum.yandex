@@ -6,7 +6,7 @@ import template from './template.hbs?raw';
 
 interface FormProps extends BaseProps {
   body: Component<BaseProps>[];
-  buttonText?: string;
+  buttonText?: Nullable<string>;
   className?: string;
 }
 
