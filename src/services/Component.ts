@@ -2,6 +2,7 @@ import Handlebars from 'handlebars';
 import { nanoid } from 'nanoid';
 import { BaseProps, Nullable } from '../utils/types';
 import EventBus from './EventBus';
+import { isEqual } from "../utils/isEqual";
 
 export const eventTypesMap = {
   onClick: 'click',
@@ -200,7 +201,7 @@ export default abstract class Component<P extends BaseProps = never, S extends o
     this._bus.on(Events.INIT, this._init.bind(this));
     this._bus.on(Events.RENDER, this._render.bind(this));
     this._bus.on(Events.DID_MOUNT, this._componentDidMount.bind(this));
-    this._bus.on(Events.DID_UPDATE, this._componentDidUpdate.bind(this));
+    this._bus.on(Events.DID_UPDATE, (oldProps: Record<string, unknown> | object, newProps: Record<string, unknown> | object) => this._componentDidUpdate(oldProps, newProps));
   }
 
   private _init() {
@@ -208,6 +209,7 @@ export default abstract class Component<P extends BaseProps = never, S extends o
   }
 
   private _render() {
+    console.log('render: ', this.constructor.name);
     this.removeEvents();
 
     const fragment = this.render();
@@ -227,6 +229,7 @@ export default abstract class Component<P extends BaseProps = never, S extends o
 
   private _componentDidMount() {
     this.componentDidMount?.();
+    console.log('componentDidMount: ', this.constructor.name);
 
     Object.values(this._children ?? {}).forEach(children => {
       if (Array.isArray(children)) {
@@ -237,9 +240,11 @@ export default abstract class Component<P extends BaseProps = never, S extends o
     });
   }
 
-  private _componentDidUpdate() {
-    this.componentDidUpdate?.();
-    this._bus.emit(Events.RENDER);
+  private _componentDidUpdate(oldProps: Record<string, unknown> | object, newProps: Record<string, unknown> | object) {
+    if (!isEqual(oldProps, newProps)) {
+      this.componentDidUpdate?.();
+      this._bus.emit(Events.RENDER);
+    }
   }
 
   private _parseProps(props: P) {

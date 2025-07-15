@@ -2,23 +2,23 @@ import { ChatPage, LoginPage, NotFoundErrorPage, ProfilePage, RegistrationPage, 
 import Router, { Route } from "./services/Router";
 
 export const enum Routes {
-  Login = '/login',
+  Login = '/',
   SignUp = '/sign-up',
   Settings = '/settings',
   Messenger = '/messenger',
   ServerError = '/server-error',
-  NotFound = '',
+  NotFound = '/not-found',
 }
 
 export default class App {
   constructor() {
     new Router('#app', [
-      new Route(Routes.Login, new LoginPage()),
-      new Route(Routes.SignUp, new RegistrationPage()),
-      new Route(Routes.Settings, new ProfilePage()),
-      new Route(Routes.Messenger, new ChatPage()),
-      new Route(Routes.ServerError, new ServerErrorPage()),
-      new Route(Routes.NotFound, new NotFoundErrorPage()),
+      new Route(Routes.Login, LoginPage),
+      new Route(Routes.SignUp, RegistrationPage),
+      new Route(Routes.Settings, ProfilePage),
+      new Route(Routes.Messenger, ChatPage),
+      new Route(Routes.ServerError, ServerErrorPage),
+      new Route(Routes.NotFound, NotFoundErrorPage),
     ]);
   }
 }

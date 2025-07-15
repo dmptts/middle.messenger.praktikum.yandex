@@ -1,7 +1,8 @@
 import { BaseProps } from "../utils/types";
 import Component from "./Component";
-import { isEqual } from "../utils/isEqual";
 import render from "../utils/render";
+
+type ComponentConstructor<T extends Component<BaseProps, object> = Component<BaseProps, object>> = new (props?: BaseProps) => T;
 
 export default class Router {
   static #instance: Router;
@@ -35,7 +36,7 @@ export default class Router {
   }
 
   #onRoute(path: string) {
-    const targetRoute = this.#routes.find(route => isEqual(path, route.path));
+    const targetRoute = this.#routes.find(route => path === route.path);
 
     if (!targetRoute) {
       this.#routes[this.#routes.length - 1].navigate(this.#rootQuery);
@@ -54,11 +55,11 @@ export default class Router {
   }
 }
 
-export class Route {
+export class Route<T extends Component<BaseProps,object> = Component<BaseProps,object>> {
   readonly #path: string;
-  readonly #component: Component<BaseProps, object>;
+  readonly #component: ComponentConstructor<T>;
 
-  constructor(path: string, component: Component<BaseProps, object>) {
+  constructor(path: string, component: ComponentConstructor<T>) {
     this.#path = path;
     this.#component = component;
   }
@@ -68,6 +69,6 @@ export class Route {
   }
 
   navigate(rootQuery: string) {
-    render(rootQuery, this.#component);
+    render(rootQuery, new this.#component());
   }
 }
