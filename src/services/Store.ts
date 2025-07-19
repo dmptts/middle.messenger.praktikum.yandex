@@ -1,36 +1,58 @@
 import EventBus from './EventBus';
+import { Indexed } from "../utils/types";
 
-enum Events {
-  CHANGE = 'STORE_CHANGE',
+export type Action = { type: string, payload?: Indexed };
+
+enum StoreEvents {
+  Updated = "UPDATED",
 }
 
 type EventListeners<T> = {
-  [Events.CHANGE]: [T];
+  [StoreEvents.Updated]: [T];
 }
 
+
+// export const connect = <P extends Component<BaseProps, object> = Component<BaseProps, object>>(
+//   component: ComponentConstructor<P>,
+//   mapStateToProps: (state: typeof RootState.state) => Partial<typeof RootState.state>
+// ): ComponentConstructor<P> => {
+//   return class extends component {
+//     constructor(props?: P) {
+//       super(props);
+//
+//       RootState.subscribe((state) => {
+//         this.props = { ...props, ...mapStateToProps(state) };
+//       });
+//     }
+//
+//     render() {
+//       return super.render();
+//     }
+//   };
+// }
+
 export default class Store<T> {
-  private _state: T;
+  private readonly _state: T;
+  private readonly _reducer: (state: T, action: Action) => T;
   private _bus: EventBus<EventListeners<T>>;
 
-  constructor(initialState: T) {
+  constructor(reducer: (state: T, action: Action) => T, initialState: T) {
     this._bus = new EventBus<EventListeners<T>>();
     this._state = initialState;
+    this._reducer = reducer;
   }
 
-  get state(): T {
+  get state() {
     return this._state;
   }
 
-  set state(state: Partial<T>) {
-    this._state = { ...this._state, ...state };
-    this._bus.emit(Events.CHANGE, this._state);
+  subscribe(fn: (state: T) => void) {
+    this._bus.on(StoreEvents.Updated, fn);
   }
 
-  subscribe(callback: (state: T) => void) {
-    this._bus.on(Events.CHANGE, callback);
-  }
-
-  unsubscribe(callback: (state: T) => void) {
-    this._bus.off(Events.CHANGE, callback);
+  dispatch(action: Action) {
+    const currentState = this._reducer(this._state, action);
+    this._bus.emit(StoreEvents.Updated, currentState);
   }
 }
+

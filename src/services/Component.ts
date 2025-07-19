@@ -12,6 +12,8 @@ export const eventTypesMap = {
   // etc...
 } as const;
 
+export type ComponentConstructor<T extends Component<BaseProps, object> = Component<BaseProps, object>> = new (props?: BaseProps) => T;
+
 enum Events {
   INIT = 'FLOW_INIT',
   DID_MOUNT = 'FLOW_DID_MOUNT',
@@ -111,7 +113,9 @@ export default abstract class Component<P extends BaseProps = never, S extends o
     this._bus.emit(Events.DID_MOUNT);
   }
 
-  protected abstract render(): DocumentFragment;
+  protected render() {
+    return new DocumentFragment()
+  };
 
   protected componentDidMount?(): void;
 
@@ -209,7 +213,6 @@ export default abstract class Component<P extends BaseProps = never, S extends o
   }
 
   private _render() {
-    console.log('render: ', this.constructor.name);
     this.removeEvents();
 
     const fragment = this.render();

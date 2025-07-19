@@ -1,8 +1,6 @@
-import { BaseProps } from "../utils/types";
-import Component from "./Component";
+import Component, { ComponentConstructor } from "./Component";
 import render from "../utils/render";
-
-type ComponentConstructor<T extends Component<BaseProps, object> = Component<BaseProps, object>> = new (props?: BaseProps) => T;
+import { BaseProps } from "../utils/types";
 
 export default class Router {
   static #instance: Router;
@@ -55,7 +53,7 @@ export default class Router {
   }
 }
 
-export class Route<T extends Component<BaseProps,object> = Component<BaseProps,object>> {
+export class Route<T extends Component<BaseProps, object> = Component<BaseProps, object>> {
   readonly #path: string;
   readonly #component: ComponentConstructor<T>;
 
