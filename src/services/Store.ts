@@ -1,5 +1,7 @@
 import EventBus from './EventBus';
-import { Indexed } from "../utils/types";
+import { BaseProps, Indexed } from "../utils/types";
+import { ComponentConstructor } from "./Component";
+import { RootState } from "../main";
 
 export type Action = { type: string, payload?: Indexed };
 
@@ -11,25 +13,27 @@ type EventListeners<T> = {
   [StoreEvents.Updated]: [T];
 }
 
+// TODO: реализовать HOC
+export const connect = <P extends BaseProps>(
+  component: ComponentConstructor<P>,
+  mapStateToProps: (state: typeof RootState.state) => Partial<typeof RootState.state>
+): ComponentConstructor<P> => {
+  return class extends component {
+    constructor(props?: P) {
 
-// export const connect = <P extends Component<BaseProps, object> = Component<BaseProps, object>>(
-//   component: ComponentConstructor<P>,
-//   mapStateToProps: (state: typeof RootState.state) => Partial<typeof RootState.state>
-// ): ComponentConstructor<P> => {
-//   return class extends component {
-//     constructor(props?: P) {
-//       super(props);
-//
-//       RootState.subscribe((state) => {
-//         this.props = { ...props, ...mapStateToProps(state) };
-//       });
-//     }
-//
-//     render() {
-//       return super.render();
-//     }
-//   };
-// }
+      super(props);
+      this.props = { ...mapStateToProps(RootState.state) };
+
+      RootState.subscribe((state) => {
+        this.props = { ...props, ...mapStateToProps(state) };
+      });
+    }
+
+    render() {
+      return super.render();
+    }
+  };
+}
 
 export default class Store<T> {
   private readonly _state: T;

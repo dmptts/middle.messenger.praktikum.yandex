@@ -1,4 +1,4 @@
-import Component, { ComponentConstructor } from "./Component";
+import { ComponentConstructor } from "./Component";
 import render from "../utils/render";
 import { BaseProps } from "../utils/types";
 
@@ -53,11 +53,11 @@ export default class Router {
   }
 }
 
-export class Route<T extends Component<BaseProps, object> = Component<BaseProps, object>> {
+export class Route<P extends BaseProps = never> {
   readonly #path: string;
-  readonly #component: ComponentConstructor<T>;
+  readonly #component: ComponentConstructor<P>;
 
-  constructor(path: string, component: ComponentConstructor<T>) {
+  constructor(path: string, component: ComponentConstructor<P>) {
     this.#path = path;
     this.#component = component;
   }

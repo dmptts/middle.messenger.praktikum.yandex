@@ -12,7 +12,7 @@ export const eventTypesMap = {
   // etc...
 } as const;
 
-export type ComponentConstructor<T extends Component<BaseProps, object> = Component<BaseProps, object>> = new (props?: BaseProps) => T;
+export type ComponentConstructor<P extends BaseProps = never> = new (props?: P) => Component<P, object>;
 
 enum Events {
   INIT = 'FLOW_INIT',
@@ -73,7 +73,7 @@ export default abstract class Component<P extends BaseProps = never, S extends o
     return this._state;
   }
 
-  set props(props: Partial<P>) {
+  set props(props: BaseProps) {
     this._props = { ...(this._props ?? {}), ...props } as P;
     const { listeners, children, primitives } = this._parseProps(this._props);
 
@@ -122,7 +122,7 @@ export default abstract class Component<P extends BaseProps = never, S extends o
   protected componentDidUpdate?(): void;
 
   protected compile(template: string, children?: ComponentChildren<P>) {
-    // console.log(this.constructor.name)
+    console.log(this.constructor.name)
     const stubs = {} as Record<keyof P, string | string[]>;
     const allChildren = { ...this._children, ...children };
     const fragment = document.createElement('template');

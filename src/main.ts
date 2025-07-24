@@ -7,8 +7,8 @@ Handlebars.registerHelper('ifEquals', function(this: Record<string, unknown>, ar
 })
 
 export enum ActionTypes {
-  INCREMENT = 'INCREMENT',
-  DECREMENT = 'DECREMENT',
+  SignIn = 'SIGN_IN',
+  SignUp = 'SIGN_UP',
 }
 
 interface RootState {
@@ -17,11 +17,7 @@ interface RootState {
 
 const reducer = (state: RootState, action: Action) => {
   switch (action.type) {
-    case ActionTypes.INCREMENT:
-      state.count += 1;
-      return state;
-    case ActionTypes.DECREMENT:
-      state.count -= 1;
+    case ActionTypes.SignIn:
       return state;
     default:
       return state;
