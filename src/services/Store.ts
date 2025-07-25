@@ -1,9 +1,9 @@
 import EventBus from './EventBus';
-import { BaseProps, Indexed } from "../utils/types";
+import { BaseProps } from "../utils/types";
 import { ComponentConstructor } from "./Component";
-import { RootState } from "../main";
+import { RootStore } from "../main";
 
-export type Action = { type: string, payload?: Indexed };
+export type Action = { type: string, payload?: typeof RootStore.state[keyof typeof RootStore.state] };
 
 enum StoreEvents {
   Updated = "UPDATED",
@@ -13,18 +13,17 @@ type EventListeners<T> = {
   [StoreEvents.Updated]: [T];
 }
 
-// TODO: реализовать HOC
 export const connect = <P extends BaseProps>(
   component: ComponentConstructor<P>,
-  mapStateToProps: (state: typeof RootState.state) => Partial<typeof RootState.state>
+  mapStateToProps: (state: typeof RootStore.state) => Partial<typeof RootStore.state>
 ): ComponentConstructor<P> => {
   return class extends component {
     constructor(props?: P) {
 
       super(props);
-      this.props = { ...mapStateToProps(RootState.state) };
+      this.props = { ...mapStateToProps(RootStore.state) };
 
-      RootState.subscribe((state) => {
+      RootStore.subscribe((state) => {
         this.props = { ...props, ...mapStateToProps(state) };
       });
     }
@@ -36,7 +35,7 @@ export const connect = <P extends BaseProps>(
 }
 
 export default class Store<T> {
-  private readonly _state: T;
+  private _state: T;
   private readonly _reducer: (state: T, action: Action) => T;
   private _bus: EventBus<EventListeners<T>>;
 
@@ -55,8 +54,8 @@ export default class Store<T> {
   }
 
   dispatch(action: Action) {
-    const currentState = this._reducer(this._state, action);
-    this._bus.emit(StoreEvents.Updated, currentState);
+    this._state = this._reducer(this._state, action);
+    this._bus.emit(StoreEvents.Updated, this._state);
   }
 }
 

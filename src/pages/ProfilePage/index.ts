@@ -1,7 +1,6 @@
 import BackButton from '../../components/BackButton';
 import Form from '../../components/Form';
 import Input from '../../components/Input';
-import Link from '../../components/Link';
 import Userpic from '../../components/Userpic';
 import Component from '../../services/Component';
 import {
@@ -14,7 +13,11 @@ import {
 } from '../../utils/validation';
 import template from './template.hbs?raw';
 import Button from "../../components/Button";
-import { Routes } from "../../App";
+import { RootStore } from "../../main";
+import { connect } from "../../services/Store";
+import ProfileController from "../../controllers/ProfileController";
+import { ChangeProfileRequestDTO } from "../../apis/UserAPI";
+import AuthController from "../../controllers/AuthController";
 
 const enum ProfilePageModes {
   Default = 'DEFAULT',
@@ -26,11 +29,14 @@ interface ProfilePageState {
   mode: ProfilePageModes;
 }
 
-export default class ProfilePage extends Component<never, ProfilePageState> {
+class ProfilePage extends Component<never, ProfilePageState> {
   constructor() {
     super();
     this.setState({
       mode: ProfilePageModes.Default,
+    });
+    RootStore.subscribe(state => {
+      this.props = { currentUser: state.currentUser }
     });
   }
 
@@ -40,7 +46,7 @@ export default class ProfilePage extends Component<never, ProfilePageState> {
       name: 'email',
       type: 'text',
       label: 'Почта',
-      value: 'pochta@yandex.ru',
+      value: RootStore.state.currentUser?.email ?? '',
       labelPosition: 'left',
       validation: validateEmail,
       onBlur: () => emailInput.validate(),
@@ -52,10 +58,11 @@ export default class ProfilePage extends Component<never, ProfilePageState> {
       name: 'login',
       type: 'text',
       label: 'Логин',
-      value: 'ivanivanov',
+      value: RootStore.state.currentUser?.login ?? '',
       labelPosition: 'left',
       validation: validateLogin,
       onBlur: () => loginInput.validate(),
+      disabled: this.state?.mode !== ProfilePageModes.Edit,
     });
 
     const firstNameInput = new Input({
@@ -63,7 +70,7 @@ export default class ProfilePage extends Component<never, ProfilePageState> {
       name: 'first_name',
       type: 'text',
       label: 'Имя',
-      value: 'Иван',
+      value: RootStore.state.currentUser?.first_name ?? '',
       labelPosition: 'left',
       validation: validateName,
       onBlur: () => firstNameInput.validate(),
@@ -75,7 +82,7 @@ export default class ProfilePage extends Component<never, ProfilePageState> {
       name: 'second_name',
       type: 'text',
       label: 'Фамилия',
-      value: 'Иванов',
+      value: RootStore.state.currentUser?.second_name ?? '',
       labelPosition: 'left',
       validation: validateName,
       onBlur: () => secondNameInput.validate(),
@@ -87,7 +94,7 @@ export default class ProfilePage extends Component<never, ProfilePageState> {
       name: 'username',
       type: 'text',
       label: 'Имя в чате',
-      value: 'Иван',
+      value: RootStore.state.currentUser?.login ?? '',
       labelPosition: 'left',
       disabled: this.state?.mode !== ProfilePageModes.Edit,
     });
@@ -97,7 +104,7 @@ export default class ProfilePage extends Component<never, ProfilePageState> {
       name: 'phone',
       type: 'text',
       label: 'Телефон',
-      value: '+7 (909) 967 30 30',
+      value: RootStore.state.currentUser?.phone ?? '',
       labelPosition: 'left',
       validation: validatePhone,
       onBlur: () => phoneInput.validate(),
@@ -106,7 +113,7 @@ export default class ProfilePage extends Component<never, ProfilePageState> {
 
     const oldPasswordInput = new Input({
       id: 'old-password-input',
-      name: 'old-password',
+      name: 'oldPassword',
       type: 'password',
       label: 'Старый пароль',
       labelPosition: 'left',
@@ -114,7 +121,7 @@ export default class ProfilePage extends Component<never, ProfilePageState> {
 
     const passwordInput = new Input({
       id: 'password-input',
-      name: 'password',
+      name: 'newPassword',
       type: 'password',
       label: 'Пароль',
       labelPosition: 'left',
@@ -124,7 +131,7 @@ export default class ProfilePage extends Component<never, ProfilePageState> {
 
     const passwordConfirmationInput = new Input({
       id: 'password-confirmation-input',
-      name: 'password',
+      name: 'newPassword',
       type: 'password',
       label: 'Пароль (еще раз)',
       labelPosition: 'left',
@@ -152,7 +159,24 @@ export default class ProfilePage extends Component<never, ProfilePageState> {
           phoneInput,
         ],
         className: 'profile-page__form',
-        buttonText: this.state?.mode === ProfilePageModes.Edit ? 'Сохранить' : null,
+        buttonText: this.state?.mode !== ProfilePageModes.Default ? 'Сохранить' : null,
+        onSubmit: async (e) => {
+          const form = e.target as HTMLFormElement;
+          const formData = new FormData(form);
+
+          if (this.state?.mode === ProfilePageModes.Edit) {
+            const data = Object.fromEntries(formData.entries()) as ChangeProfileRequestDTO;
+            await ProfileController.changeProfile(data)
+            this.setState({ mode: ProfilePageModes.Default })
+          } else if (this.state?.mode === ProfilePageModes.ChangePassword) {
+            const { oldPassword, newPassword } = Object.fromEntries(formData.entries())
+
+            if (typeof oldPassword === 'string' && typeof newPassword === 'string') {
+              await ProfileController.changePassword({ oldPassword, newPassword })
+              this.setState({ mode: ProfilePageModes.Default })
+            }
+          }
+        },
       }),
       editProfileLink: new Button({
         text: 'Изменить данные',
@@ -164,12 +188,19 @@ export default class ProfilePage extends Component<never, ProfilePageState> {
         variant: 'link',
         onClick: () => this.setState({ mode: ProfilePageModes.ChangePassword }),
       }),
-      quitLink: new Link({
+      quitLink: new Button({
         text: 'Выйти',
+        variant: 'link',
         className: 'profile-page__quit-button',
-        to: Routes.Login,
+        onClick: async () => await AuthController.logOut(),
       }),
       backButton: new BackButton(),
     })
   }
+
+  protected async componentDidMount() {
+    await AuthController.getUser();
+  }
 }
+
+export default connect(ProfilePage, (state) => ({ currentUser: state.currentUser }));

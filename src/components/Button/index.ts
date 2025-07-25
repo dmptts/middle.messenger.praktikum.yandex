@@ -22,6 +22,10 @@ export default class Button extends Component<ButtonProps> {
     });
   }
 
+  get type() {
+    return this.props?.type
+  }
+
   render() {
     return this.compile(template);
   }

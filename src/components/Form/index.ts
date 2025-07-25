@@ -7,36 +7,34 @@ import template from './template.hbs?raw';
 interface FormProps extends BaseProps {
   body: Component<BaseProps>[];
   buttonText?: Nullable<string>;
+  onSubmit?: EventListener;
   className?: string;
 }
 
-interface InternalFormProps extends BaseProps {
-  body: Component<BaseProps>[];
-  button: Nullable<Button>;
-  className?: string;
-}
-
-export default class Form extends Component<InternalFormProps> {
+export default class Form extends Component<FormProps> {
   constructor(props: FormProps) {
-    const submitButton = props.buttonText ? new Button({
-      text: props.buttonText,
-      type: 'submit',
-      className: props.className ? `${props.className}-submit` : '',
-    }) : null;
-
     super({
-      body: props.body,
-      button: submitButton,
-      className: props.className,
-    });
+      ...props,
+      onSubmit: (e) => {
+        e.preventDefault();
 
-    this.props = {
-      onSubmit: this._handleSubmit.bind(this),
-    }
+        if (!this._validate()) {
+          return;
+        }
+
+        props.onSubmit?.(e)
+      }
+    });
   }
 
   protected render() {
-    return this.compile(template)
+    return this.props?.buttonText ? this.compile(template, {
+      button: new Button({
+        text: this.props.buttonText,
+        type: 'submit',
+        className: this.props?.className ? `${this.props.className}-submit` : '',
+      })
+    }) : this.compile(template);
   }
 
   private _validate() {
@@ -59,20 +57,5 @@ export default class Form extends Component<InternalFormProps> {
     const results = inputs.map((input) => input.validate());
 
     return results.every((input) => input === null);
-  }
-
-  private _handleSubmit(e: Event) {
-    e.preventDefault();
-
-    if (!this._validate()) {
-      return;
-    }
-
-    const form = e.target;
-
-    if (form instanceof HTMLFormElement) {
-      const formData = new FormData(form);
-      console.log(Object.fromEntries(formData.entries()));
-    }
   }
 }
