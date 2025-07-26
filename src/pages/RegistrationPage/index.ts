@@ -11,6 +11,7 @@ import {
   validatePhone,
 } from '../../utils/validation';
 import template from './template.hbs?raw';
+import AuthController from "../../controllers/AuthController";
 
 export default class RegistrationPage extends Component {
   constructor() {
@@ -88,11 +89,37 @@ export default class RegistrationPage extends Component {
           loginInput,
           firstNameInput,
           secondNameInput,
+          phoneInput,
           passwordInput,
           passwordConfirmationInput,
         ],
         buttonText: 'Зарегистрироваться',
         className: 'registration-form registration-page__form',
+        onSubmit: async (e) => {
+          const form = e.target as HTMLFormElement;
+          const formData = new FormData(form);
+
+          const { first_name, second_name, login, password, email, phone } = Object.fromEntries(formData.entries());
+
+          if (
+            typeof first_name === 'string'
+            && typeof second_name === 'string'
+            && typeof login === 'string'
+            && typeof password === 'string'
+            && typeof email === 'string'
+            && typeof phone === 'string'
+          ) {
+            await AuthController.signUp({
+              first_name,
+              second_name,
+              login,
+              password,
+              email,
+              phone
+            })
+          }
+
+        },
       }),
       link: new Link({
         text: 'Войти',
