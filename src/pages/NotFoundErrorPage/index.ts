@@ -1,23 +1,18 @@
 import Link from '../../components/Link';
 import Component from '../../services/Component';
-import { BaseProps } from '../../utils/types';
 import template from './template.hbs?raw';
 
-interface NotFoundErrorPageProps extends BaseProps {
-  link: Link;
-}
-
-export default class NotFoundErrorPage extends Component<NotFoundErrorPageProps> {
+export default class NotFoundErrorPage extends Component {
   constructor() {
-    super({
+    super();
+  }
+
+  render() {
+    return this.compile(template, {
       link: new Link({
         text: 'Назад к чатам',
         to: '/messenger',
       }),
     });
-  }
-
-  render() {
-    return this.compile(template);
   }
 }

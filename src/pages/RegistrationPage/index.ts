@@ -2,7 +2,6 @@ import Form from '../../components/Form';
 import Input from '../../components/Input';
 import Link from '../../components/Link';
 import Component from '../../services/Component';
-import { BaseProps } from '../../utils/types';
 import {
   validateEmail,
   validateLogin,
@@ -13,13 +12,12 @@ import {
 } from '../../utils/validation';
 import template from './template.hbs?raw';
 
-interface RegistrationPageProps extends BaseProps {
-  form: Form;
-  link: Link;
-}
-
-export default class RegistrationPage extends Component<RegistrationPageProps> {
+export default class RegistrationPage extends Component {
   constructor() {
+    super();
+  }
+
+  render() {
     const emailInput = new Input({
       id: 'email-input',
       name: 'email',
@@ -83,7 +81,7 @@ export default class RegistrationPage extends Component<RegistrationPageProps> {
       onBlur: () => passwordConfirmationInput.validate(),
     });
 
-    super({
+    return this.compile(template, {
       form: new Form({
         body: [
           emailInput,
@@ -102,9 +100,5 @@ export default class RegistrationPage extends Component<RegistrationPageProps> {
         to: '/',
       }),
     });
-  }
-
-  render() {
-    return this.compile(template);
   }
 }
