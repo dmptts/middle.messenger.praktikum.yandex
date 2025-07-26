@@ -8,7 +8,6 @@
 
 .profile-page__form {
     width: 100%;
-    margin-bottom: 60px;
 }
 
 .profile-page__links {
@@ -29,4 +28,11 @@
 
 .profile-page__quit-button {
     color: var(--color-accent);
+}
+
+.profile-page__form-submit {
+  width: 200px;
+  margin-top: 60px;
+  margin-left: auto;
+  margin-right: auto;
 }

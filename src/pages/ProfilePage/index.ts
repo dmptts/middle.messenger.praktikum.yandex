@@ -18,6 +18,9 @@ import { connect } from "../../services/Store";
 import ProfileController from "../../controllers/ProfileController";
 import { ChangeProfileRequestDTO } from "../../apis/UserAPI";
 import AuthController from "../../controllers/AuthController";
+import HTTPTransport from "../../apis/HTTPTransport";
+import Router from "../../services/Router";
+import { Routes } from "../../App";
 
 const enum ProfilePageModes {
   Default = 'DEFAULT',
@@ -144,6 +147,7 @@ class ProfilePage extends Component<never, ProfilePageState> {
         size: 130,
         withChange: true,
         className: 'profile-page__userpic',
+        src: `${HTTPTransport.BASE_URL}/resources${RootStore.state.currentUser?.avatar}`
       }),
       form: new Form({
         body: this.state?.mode === ProfilePageModes.ChangePassword ? [
@@ -194,7 +198,11 @@ class ProfilePage extends Component<never, ProfilePageState> {
         className: 'profile-page__quit-button',
         onClick: async () => await AuthController.logOut(),
       }),
-      backButton: new BackButton(),
+      backButton: new BackButton({
+        onClick: () => this.state!.mode !== ProfilePageModes.Default
+          ? this.setState({ mode: ProfilePageModes.Default })
+          : Router.getInstance().go(Routes.Messenger),
+      }),
     })
   }
 

@@ -16,22 +16,22 @@ export interface ClientErrorDto {
 }
 
 export default class HTTPTransport {
-  static #BASE_URL = 'https://ya-praktikum.tech/api/v2';
+  static BASE_URL = 'https://ya-praktikum.tech/api/v2';
 
   static get(url: string, options: HTTPRequestOptions = {}) {
-    return this.request(`${(HTTPTransport.#BASE_URL)}${url}`, RequestMethods.Get, options);
+    return this.request(`${(HTTPTransport.BASE_URL)}${url}`, RequestMethods.Get, options);
   }
 
   static post<T>(url: string, options: HTTPRequestOptions<T> = {}) {
-    return this.request(`${(HTTPTransport.#BASE_URL)}${url}`, RequestMethods.Post, options);
+    return this.request(`${(HTTPTransport.BASE_URL)}${url}`, RequestMethods.Post, options);
   }
 
   static put<T>(url: string, options: HTTPRequestOptions<T> = {}) {
-    return this.request(`${(HTTPTransport.#BASE_URL)}${url}`, RequestMethods.Put, options);
+    return this.request(`${(HTTPTransport.BASE_URL)}${url}`, RequestMethods.Put, options);
   }
 
   static delete(url: string, options: HTTPRequestOptions = {}) {
-    return this.request(`${(HTTPTransport.#BASE_URL)}${url}`, RequestMethods.Delete, options);
+    return this.request(`${(HTTPTransport.BASE_URL)}${url}`, RequestMethods.Delete, options);
   }
 
   static request<T>(url: string, method: RequestMethods, options: HTTPRequestOptions<T> = {}): Promise<XMLHttpRequest> {
@@ -40,6 +40,7 @@ export default class HTTPTransport {
       const xhr = new XMLHttpRequest();
       const urlParams = new URLSearchParams();
       const isGet = method === RequestMethods.Get;
+      const isFormData = payload instanceof FormData;
       xhr.withCredentials = true;
 
       if (isGet && !!payload) {
@@ -53,9 +54,11 @@ export default class HTTPTransport {
           : url,
       );
 
-      Object.keys(headers).forEach(key => {
-        xhr.setRequestHeader(key, headers[key]);
-      });
+      if (!isFormData) {
+        Object.keys(headers).forEach(key => {
+          xhr.setRequestHeader(key, headers[key]);
+        });
+      }
 
       xhr.onload = function() {
         resolve(xhr);
@@ -69,6 +72,8 @@ export default class HTTPTransport {
 
       if (isGet || !payload) {
         xhr.send();
+      } else if (isFormData) {
+        xhr.send(payload);
       } else {
         xhr.send(JSON.stringify(payload));
       }

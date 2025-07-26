@@ -9,6 +9,7 @@ export const eventTypesMap = {
   onBlur: 'blur',
   onInput: 'input',
   onSubmit: 'submit',
+  onChange: 'change',
   // etc...
 } as const;
 
@@ -29,7 +30,7 @@ type EventListeners = {
 }
 
 type ComponentEvents<P> = Record<keyof P, EventListener>;
-type ComponentChildren<P> = Record<keyof P, Component<BaseProps> | Component<BaseProps>[]>;
+type ComponentChildren<P> = Record<keyof P, Component<BaseProps, object> | Component<BaseProps, object>[]>;
 type ComponentPrimitives<P> = Record<keyof P, string | number | boolean | null | unknown>;
 
 export default abstract class Component<P extends BaseProps = never, S extends object = never> {

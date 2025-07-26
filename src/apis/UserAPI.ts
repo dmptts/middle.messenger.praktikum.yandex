@@ -64,10 +64,9 @@ export default class UserAPI {
   }
 
   static async changeAvatar(payload: FormData) {
-    const response = await HTTPTransport.put('/user/avatar', {
+    const response = await HTTPTransport.put('/user/profile/avatar', {
       headers: {
         mode: 'cors',
-        'Content-Type': 'multipart/form-data',
       },
       payload,
     })
