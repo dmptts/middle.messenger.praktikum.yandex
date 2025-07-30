@@ -30,7 +30,7 @@ type EventListeners = {
 }
 
 type ComponentEvents<P> = Record<keyof P, EventListener>;
-type ComponentChildren<P> = Record<keyof P, Component<BaseProps, object> | Component<BaseProps, object>[]>;
+type ComponentChildren<P> = Record<keyof P, Component<BaseProps, object> | HTMLElement | Array<Component<BaseProps, object> | HTMLElement>>;
 type ComponentPrimitives<P> = Record<keyof P, string | number | boolean | null | unknown>;
 
 export default abstract class Component<P extends BaseProps = never, S extends object = never> {
@@ -42,11 +42,11 @@ export default abstract class Component<P extends BaseProps = never, S extends o
   private _props: Nullable<P>;
   private _bus: EventBus<EventListeners>;
 
-  protected constructor(props?: P) {
+  protected constructor(props?: P, state?: S) {
     this._id = nanoid();
     this._bus = new EventBus();
     this._props = null;
-    this._state = null;
+    this._state = state ?? null;
     this._listeners = null;
     this._children = null;
     this._primitives = null;
@@ -78,8 +78,8 @@ export default abstract class Component<P extends BaseProps = never, S extends o
     this._props = { ...(this._props ?? {}), ...props } as P;
     const { listeners, children, primitives } = this._parseProps(this._props);
 
-    this._listeners = listeners;
-    this._children = children;
+    this._listeners = { ...this._listeners, ...listeners };
+    this._children = { ...this._children, ...children };
 
     if (this._primitives) {
       for (const key in primitives) {
@@ -123,29 +123,31 @@ export default abstract class Component<P extends BaseProps = never, S extends o
   protected componentDidUpdate?(): void;
 
   protected compile(template: string, children?: ComponentChildren<P>) {
-    console.log(this.constructor.name)
     const stubs = {} as Record<keyof P, string | string[]>;
     const allChildren = { ...this._children, ...children };
+    this._children = allChildren as ComponentChildren<P>;
     const fragment = document.createElement('template');
 
     if (allChildren) {
       Object.entries(allChildren).forEach(([key, child]) => {
         if (Array.isArray(child)) {
           stubs[key as keyof P] = child
-            .map((component) => `<div data-id="${component._id}"></div>`)
+            .map((component) => component instanceof Component ? `<div data-id="${component._id}"></div>` : component.outerHTML)
             .join('');
         } else {
-          stubs[key as keyof P] = `<div data-id="${child._id}"></div>`;
+          stubs[key as keyof P] = child instanceof Component ? `<div data-id="${child._id}"></div>` : child.outerHTML;
         }
       });
     }
+
 
     fragment.innerHTML = Handlebars.compile(template)(Object.assign({}, { ...this._primitives, ...this._state }, stubs));
 
     if (allChildren) {
       Object.values(allChildren).forEach((child) => {
         if (Array.isArray(child)) {
-          const stubs = child
+          const components = child.filter((component) => component instanceof Component);
+          const stubs = components
             .map((component) => fragment.content.querySelector(`[data-id="${component._id}"]`))
             .filter(Boolean) as HTMLElement[];
 
@@ -153,12 +155,10 @@ export default abstract class Component<P extends BaseProps = never, S extends o
             return;
           }
 
-          stubs.forEach((stub, i) => stub.replaceWith(child[i].element!));
-        } else {
+          stubs.forEach((stub, i) => stub.replaceWith(components[i].element!));
+        } else if (child instanceof Component) {
           const stub = fragment.content.querySelector(`[data-id="${child._id}"]`);
-          if (!stub) {
-            return;
-          }
+          if (!stub) return;
 
           stub.replaceWith(child.element!);
         }
@@ -233,13 +233,14 @@ export default abstract class Component<P extends BaseProps = never, S extends o
 
   private _componentDidMount() {
     this.componentDidMount?.();
-    console.log('componentDidMount: ', this.constructor.name);
 
-    Object.values(this._children ?? {}).forEach(children => {
-      if (Array.isArray(children)) {
-        children.forEach((child) => child.dispatchComponentDidMount());
+    Object.values(this._children ?? {}).forEach(child => {
+      if (!(child instanceof Component)) return;
+
+      if (Array.isArray(child)) {
+        child.forEach((child) => child.dispatchComponentDidMount());
       } else {
-        children.dispatchComponentDidMount();
+        child.dispatchComponentDidMount();
       }
     });
   }
@@ -261,7 +262,8 @@ export default abstract class Component<P extends BaseProps = never, S extends o
         listeners[key as keyof P] = value.bind(this);
       } else if (
         value instanceof Component
-        || (Array.isArray(value) && value.every((el) => el instanceof Component))) {
+        || value instanceof HTMLElement
+        || (Array.isArray(value) && value.length > 0 && value.every((el) => el instanceof Component || el instanceof HTMLElement))) {
         children[key as keyof P] = value;
       } else {
         primitives[key as keyof P] = value;
