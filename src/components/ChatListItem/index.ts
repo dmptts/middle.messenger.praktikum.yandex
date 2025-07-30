@@ -1,10 +1,11 @@
 import Component from '../../services/Component';
-import { BaseProps, ChatDto } from '../../utils/types';
+import { BaseProps } from '../../utils/types';
 import Userpic from '../Userpic';
 import template from './template.hbs?raw';
+import { ChatListResponseDTO } from "../../apis/ChatsAPI";
 
 interface ChatListItemProps extends BaseProps {
-  chat: ChatDto;
+  chat: ChatListResponseDTO;
   onClick: EventListener;
   isSelected?: boolean;
 }
