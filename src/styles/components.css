@@ -8,3 +8,5 @@
 @import url("/src/components/Chat/styles.css");
 @import url("/src/components/MessageInput/styles.css");
 @import url("/src/components/Modal/styles.css");
+@import url("/src/components/UserDeleteList/styles.css");
+@import url("/src/components/UserDeleteListItem/styles.css");

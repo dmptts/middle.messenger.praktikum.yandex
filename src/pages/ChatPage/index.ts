@@ -1,10 +1,12 @@
 import Chat from '../../components/Chat';
 import ChatList from '../../components/ChatList';
-import { chatsMock } from '../../mocks/chats';
 import Component from '../../services/Component';
 import { MOBILE_WIDTH } from '../../utils/const';
 import { Nullable } from '../../utils/types';
 import template from './template.hbs?raw';
+import { connect } from "../../services/Store";
+import { RootStore } from "../../main";
+import ChatController from "../../controllers/ChatController";
 
 export enum ChatPageMode {
   Chat = 'CHAT',
@@ -12,29 +14,31 @@ export enum ChatPageMode {
   All = 'ALL',
 }
 
-export interface ChatState {
+export interface ChatPageState {
   selectedChat: Nullable<number>;
   mode: ChatPageMode;
 }
 
-export default class ChatPage extends Component<never, ChatState> {
+class ChatPage extends Component<never, ChatPageState> {
   constructor() {
     super();
     this.setState({
       mode: window.innerWidth > MOBILE_WIDTH ? ChatPageMode.All : ChatPageMode.ChatList,
       selectedChat: null,
-    })
+    });
+    RootStore.subscribe(state => this.props = { chats: state.chats });
   }
 
   render() {
     const list = new ChatList({
-      list: chatsMock,
+      list: RootStore.state.chats ?? [],
       setPageState: this.setState.bind(this),
+      selectedChat: this.state?.selectedChat ?? undefined,
       className: 'chat-page__list',
     });
 
     const chat = new Chat({
-      chat: this.state?.selectedChat ? chatsMock.find((chat) => chat.id === this.state!.selectedChat) : null,
+      chat: this.state?.selectedChat ? RootStore.state.chats.find((chat) => chat.id === this.state!.selectedChat) : null,
       setPageState: this.setState.bind(this),
       className: 'chat-page__chat',
       isMobile: this.state?.mode !== ChatPageMode.All
@@ -43,8 +47,9 @@ export default class ChatPage extends Component<never, ChatState> {
     return this.compile(template, { list, chat });
   }
 
-  protected componentDidMount() {
+  protected async componentDidMount() {
     window.addEventListener('resize', this._handleWindowResize.bind(this));
+    await ChatController.getChats()
   }
 
   private _handleWindowResize() {
@@ -57,3 +62,5 @@ export default class ChatPage extends Component<never, ChatState> {
     }
   }
 }
+
+export default connect(ChatPage, (state) => ({ chats: state.chats }));

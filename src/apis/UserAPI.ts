@@ -10,6 +10,7 @@ export interface ChangeProfileRequestDTO {
 }
 
 export interface UserResponseDTO {
+  id: number;
   first_name: string;
   second_name: string;
   login: string;
@@ -22,6 +23,10 @@ export interface UserResponseDTO {
 export interface ChangePasswordRequestDTO {
   oldPassword: string;
   newPassword: string;
+}
+
+export interface SearchUserRequestDTO {
+  login: string;
 }
 
 export default class UserAPI {
@@ -73,6 +78,25 @@ export default class UserAPI {
 
     if (response.status === 200) {
       return JSON.parse(response.responseText) as UserResponseDTO;
+    } else if (response.status === 400) {
+      const error = JSON.parse(response.responseText) as ClientErrorDto;
+      throw new Error(error.reason);
+    } else {
+      throw new Error(`Неожиданная ошибка: ${response.status}`);
+    }
+  }
+
+  static async searchUser(payload: SearchUserRequestDTO) {
+    const response = await HTTPTransport.post('/user/search', {
+      headers: {
+        mode: 'cors',
+        'Content-Type': 'application/json',
+      },
+      payload,
+    });
+
+    if (response.status === 200) {
+      return JSON.parse(response.responseText) as Array<UserResponseDTO>;
     } else if (response.status === 400) {
       const error = JSON.parse(response.responseText) as ClientErrorDto;
       throw new Error(error.reason);

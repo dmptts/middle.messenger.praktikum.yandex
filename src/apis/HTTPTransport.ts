@@ -30,7 +30,7 @@ export default class HTTPTransport {
     return this.request(`${(HTTPTransport.BASE_URL)}${url}`, RequestMethods.Put, options);
   }
 
-  static delete(url: string, options: HTTPRequestOptions = {}) {
+  static delete<T>(url: string, options: HTTPRequestOptions<T> = {}) {
     return this.request(`${(HTTPTransport.BASE_URL)}${url}`, RequestMethods.Delete, options);
   }
 

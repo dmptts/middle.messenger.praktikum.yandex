@@ -1,4 +1,4 @@
-import ChatsAPI, { AddUserToChatRequestDTO } from "../apis/ChatsAPI";
+import ChatsAPI, { ModifyChatUsersRequestDTO } from "../apis/ChatsAPI";
 import { RootStore } from "../main";
 import UserAPI, { SearchUserRequestDTO } from "../apis/UserAPI";
 
@@ -30,13 +30,46 @@ export default class ChatController {
     }
   }
 
-  static async addUserToChat(payload: AddUserToChatRequestDTO) {
+  static async deleteChat(id: number) {
+    try {
+      await ChatsAPI.deleteChat(id);
+      const response = await ChatsAPI.getChatList();
+      RootStore.dispatch({ type: 'chats/setAll', payload: response });
+    } catch (err) {
+      if (err instanceof Error) {
+        console.error(`Ошибка: ${err.message}`);
+      }
+    }
+  }
+
+  static async addUserToChat(payload: ModifyChatUsersRequestDTO) {
     try {
       await ChatsAPI.addUserToChat(payload);
     } catch (err) {
       if (err instanceof Error) {
         console.error(`Ошибка: ${err.message}`);
       }
+    }
+  }
+
+  static async removeUserFromChat(payload: ModifyChatUsersRequestDTO) {
+    try {
+      await ChatsAPI.removeUserFromChat(payload);
+    } catch (err) {
+      if (err instanceof Error) {
+        console.error(`Ошибка: ${err.message}`);
+      }
+    }
+  }
+
+  static async getChatUsers(chatId: number) {
+    try {
+      return await ChatsAPI.getChatUsers(chatId);
+    } catch (err) {
+      if (err instanceof Error) {
+        console.error(`Ошибка: ${err.message}`);
+      }
+      return [];
     }
   }
 

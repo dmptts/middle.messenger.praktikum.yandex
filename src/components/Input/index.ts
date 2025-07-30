@@ -14,6 +14,7 @@ interface InputProps extends BaseProps {
   onBlur?: EventListener;
   onClick?: EventListener;
   onChange?: EventListener;
+  onInput?: EventListener;
   validation?: (value: string) => Nullable<string>;
   className?: string;
   accept?: string;
