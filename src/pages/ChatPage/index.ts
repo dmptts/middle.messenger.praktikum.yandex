@@ -7,6 +7,7 @@ import template from './template.hbs?raw';
 import { connect } from "../../services/Store";
 import { RootStore } from "../../main";
 import ChatController from "../../controllers/ChatController";
+import AuthController from "../../controllers/AuthController";
 
 export enum ChatPageMode {
   Chat = 'CHAT',
@@ -20,12 +21,22 @@ export interface ChatPageState {
 }
 
 class ChatPage extends Component<never, ChatPageState> {
+  private readonly chat: Chat;
   constructor() {
     super();
     this.setState({
       mode: window.innerWidth > MOBILE_WIDTH ? ChatPageMode.All : ChatPageMode.ChatList,
       selectedChat: null,
     });
+
+    this.chat = new Chat({
+      chat: this.state?.selectedChat ? RootStore.state.chats.find((chat) => chat.id === this.state!.selectedChat) : null,
+      setPageState: this.setState.bind(this),
+      className: 'chat-page__chat',
+      isMobile: this.state?.mode !== ChatPageMode.All
+    });
+    this.props = { chat: this.chat }
+
     RootStore.subscribe(state => this.props = { chats: state.chats });
   }
 
@@ -37,19 +48,23 @@ class ChatPage extends Component<never, ChatPageState> {
       className: 'chat-page__list',
     });
 
-    const chat = new Chat({
-      chat: this.state?.selectedChat ? RootStore.state.chats.find((chat) => chat.id === this.state!.selectedChat) : null,
-      setPageState: this.setState.bind(this),
-      className: 'chat-page__chat',
-      isMobile: this.state?.mode !== ChatPageMode.All
-    });
-
-    return this.compile(template, { list, chat });
+    return this.compile(template, { list });
   }
 
   protected async componentDidMount() {
     window.addEventListener('resize', this._handleWindowResize.bind(this));
-    await ChatController.getChats()
+    await AuthController.getUser();
+    await ChatController.getChats();
+  }
+
+  protected async componentDidUpdate() {
+    if (this.chat) {
+      this.chat.props = {
+        chat: this.state?.selectedChat
+          ? RootStore.state.chats.find((chat) => chat.id === this.state!.selectedChat)
+          : null
+      }
+    }
   }
 
   private _handleWindowResize() {

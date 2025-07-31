@@ -16,9 +16,9 @@ import Input from "../Input";
 import Form from "../Form";
 import ChatController from "../../controllers/ChatController";
 import UserDeleteList from "../UserDeleteList";
+import { RootStore } from "../../main";
 
 interface ChatProps extends BaseProps {
-  selectedChat?: Nullable<number>;
   chat?: Nullable<ChatListResponseDTO>;
   setPageState?: StateSetter<ChatPageState>;
   className?: string;
@@ -108,7 +108,42 @@ export default class Chat extends Component<ChatProps> {
       }
     })
 
-    super({ ...props, addUserButton, userpic, addUserModal, removeUserButton, removeUserModal, deleteChatButton });
+    const messageInput = new MessageInput({
+      className: 'chat__message-input',
+      name: 'message',
+    });
+
+    const submitButton = new Button({
+      icon: arrowIcon,
+      shape: 'circle',
+      type: 'submit',
+      className: 'chat__submit-button',
+    });
+
+    const messageForm = new Form({
+      body: [messageInput, submitButton],
+      className: 'chat__message-form',
+      onSubmit: async (e) => {
+        e.preventDefault();
+        const form = e.target as HTMLFormElement;
+        const formData = new FormData(form);
+        const { message } = Object.fromEntries(formData.entries()) as {
+          message: string;
+        };
+
+        if (!this.props?.chat?.id || !message.length) return;
+
+        ChatController.sendMessage(this.props.chat.id, message);
+        form.reset();
+      }
+    })
+
+    super({ ...props, addUserButton, userpic, addUserModal, removeUserButton, removeUserModal, deleteChatButton, messageForm });
+    RootStore.subscribe((state) => {
+      if (this.props?.chat?.id) {
+        this.props = { messages: state.messages.get(this.props.chat.id) }
+      }
+    })
   }
 
   render() {
@@ -119,11 +154,21 @@ export default class Chat extends Component<ChatProps> {
             selectedChat: null, mode: ChatPageMode.ChatList,
           })
         },
-      }), messageInput: new MessageInput({
-        className: 'chat__message-input', name: 'message',
-      }), submitButton: new Button({
-        icon: arrowIcon, shape: 'circle', className: 'chat__submit-button',
       }),
     });
+  }
+
+  protected async componentDidMount() {
+    if (this.props?.chat?.id) {
+      await ChatController.connectToChat(this.props.chat.id)
+      this.props = { messages: RootStore.state.messages.get(this.props.chat.id) ?? [] }
+    }
+  }
+
+  protected async componentDidUpdate() {
+    if (this.props?.chat?.id) {
+      await ChatController.connectToChat(this.props.chat.id)
+      this.props = { messages: RootStore.state.messages.get(this.props.chat.id) ?? [] }
+    }
   }
 }

@@ -19,6 +19,7 @@ export interface SignUpResponseDTO {
 }
 
 export interface UserDto {
+  id: number;
   first_name: string;
   second_name: string;
   login: string;

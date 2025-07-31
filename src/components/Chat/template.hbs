@@ -15,13 +15,12 @@
       </div>
     </header>
     <main class="chat__content">
-      <div class="chat__message">{{chat.last_message.content}}</div>
+      {{#each messages}}
+        <div class="chat__message">{{this.content}}</div>
+      {{/each}}
     </main>
     <footer class="chat__footer">
-      <form  class="chat__message-form">
-        {{{messageInput}}}
-        {{{submitButton}}}
-      </form>
+      {{{messageForm}}}
     </footer>
     {{{addUserModal}}}
     {{{removeUserModal}}}

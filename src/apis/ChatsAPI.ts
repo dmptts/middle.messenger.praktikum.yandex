@@ -92,12 +92,12 @@ export default class ChatsAPI {
   }
 
   static async getChatToken(id: number) {
-    const response = await HTTPTransport.get(`/chats/token/${id}`, {
+    const response = await HTTPTransport.post(`/chats/token/${id}`, {
       headers: {
         mode: 'cors',
         'Content-Type': 'application/json',
       },
-    })
+    });
 
     if (response.status === 200) {
       return JSON.parse(response.responseText) as ChatTokenResponseDTO;

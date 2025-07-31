@@ -37,6 +37,7 @@
 .chat__content {
     flex-direction: column-reverse !important;
     flex-grow: 1;
+    row-gap: 10px;
     min-height: 0;
     padding-bottom: 30px;
 }
@@ -53,7 +54,7 @@
     border-top: 1px solid var(--color-grey);
 }
 
-.chat__message-form {
+.chat__message-form-body {
     display: grid;
     grid-template-columns: 1fr 28px;
     column-gap: 10px;

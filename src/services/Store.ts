@@ -1,9 +1,16 @@
 import EventBus from './EventBus';
-import { BaseProps } from "../utils/types";
+import { BaseProps, Nullable } from "../utils/types";
 import { ComponentConstructor } from "./Component";
 import { RootStore } from "../main";
+import { ChatListResponseDTO } from "../apis/ChatsAPI";
+import { UserDto } from "../apis/AuthAPI";
+import { SendMessageResponseDTO } from "../controllers/ChatController";
 
-export type Action = { type: string, payload?: typeof RootStore.state[keyof typeof RootStore.state] };
+export type Action =
+  | { type: 'signIn' }
+  | { type: 'user/set'; payload: Nullable<UserDto> }
+  | { type: 'chats/set'; payload: ChatListResponseDTO[] }
+  | { type: 'messages/add'; payload: { chatId: number; messages: SendMessageResponseDTO[] } };
 
 enum StoreEvents {
   Updated = "UPDATED",
