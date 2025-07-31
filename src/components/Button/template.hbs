@@ -1,6 +1,6 @@
 <button
     type="{{type}}"
-    class="button-component{{#ifEquals shape 'circle'}} button-component--circle{{/ifEquals}} {{#ifEquals variant 'text'}} button-component--text{{/ifEquals}} {{className}}"
+    class="button-component{{#ifEquals shape 'circle'}} button-component--circle{{/ifEquals}}{{#ifEquals variant 'text'}} button-component--text{{/ifEquals}}{{#ifEquals variant 'link'}} button-component--link{{/ifEquals}} {{className}}"
     {{#if disabled}}disabled{{/if}}
 >
   {{text}}

@@ -6,24 +6,20 @@ import template from './template.hbs?raw';
 
 interface BackButtonProps extends BaseProps {
   className?: string;
+  onClick?: () => void;
 }
 
-interface InternalBackButtonProps extends BackButtonProps {
-  badge: Badge;
-}
-
-export default class BackButton extends Component<InternalBackButtonProps> {
+export default class BackButton extends Component<BackButtonProps> {
   constructor(props?: BackButtonProps) {
-    super({
-      ...props,
-      badge: new Badge({
-        size: 24,
-        icon: arrowIcon,
-      }),
-    });
+    super(props);
   }
 
   protected render() {
-    return this.compile(template);
+    const badge = new Badge({
+      size: 24,
+      icon: arrowIcon,
+    });
+
+    return this.compile(template, { badge });
   }
 }

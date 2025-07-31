@@ -1,21 +1,18 @@
-import Footer from '../../components/Footer';
 import Form from '../../components/Form';
 import Input from '../../components/Input';
 import Link from '../../components/Link';
 import Component from '../../services/Component';
-import { BaseProps } from '../../utils/types';
 import { validateLogin, validatePassword } from '../../utils/validation';
 import template from './template.hbs?raw';
-import {globalStorage, Pages} from "../../App";
+import { Routes } from "../../App";
+import AuthController from "../../controllers/AuthController";
 
-interface InternalLoginPageProps extends BaseProps {
-  loginForm: Form;
-  link: Link;
-  footer: Footer;
-}
-
-export default class LoginPage extends Component<InternalLoginPageProps> {
+export default class LoginPage extends Component {
   constructor() {
+    super();
+  }
+
+  render() {
     const loginInput = new Input({
       id: 'username-input',
       name: 'login',
@@ -41,26 +38,31 @@ export default class LoginPage extends Component<InternalLoginPageProps> {
       ],
       buttonText: 'Авторизоваться',
       className: 'login-form login-page__form',
+      onSubmit: async (e) => {
+        const form = e.target as HTMLFormElement;
+        const formData = new FormData(form);
+
+        const data = Object.fromEntries(formData.entries()) as {
+          login: string;
+          password: string;
+        };
+
+        await AuthController.signIn({
+          login: data.login,
+          password: data.password,
+        })
+      },
     });
 
     const link = new Link({
       text: 'Нет аккаунта?',
+      to: Routes.SignUp,
       className: 'login-page__registration-link',
-      onClick: () => globalStorage.state = {
-        currentPage: Pages.Registration,
-      },
     })
 
-    const footer = new Footer()
-
-    super({
+    return this.compile(template, {
       loginForm,
       link,
-      footer
     });
-  }
-
-  render() {
-    return this.compile(template);
   }
 }

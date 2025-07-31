@@ -1,7 +1,7 @@
 import Component from '../services/Component';
 import { BaseProps } from './types';
 
-export default (query: string, component: Component<BaseProps>) => {
+export default (query: string, component: Component<BaseProps, object>) => {
   const root = document.querySelector(query);
 
   if (!root) {
@@ -12,7 +12,7 @@ export default (query: string, component: Component<BaseProps>) => {
     throw new Error(`Компонент ${component.constructor.name} не вернул HTML Element`);
   }
 
-  root.appendChild(component.element);
+  root.replaceChildren(component.element);
   component.dispatchComponentDidMount();
 
   return root;

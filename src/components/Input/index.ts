@@ -13,8 +13,11 @@ interface InputProps extends BaseProps {
   disabled?: boolean;
   onBlur?: EventListener;
   onClick?: EventListener;
+  onChange?: EventListener;
+  onInput?: EventListener;
   validation?: (value: string) => Nullable<string>;
   className?: string;
+  accept?: string;
 }
 
 export default class Input extends Component<InputProps> {

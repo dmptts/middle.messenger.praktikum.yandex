@@ -1,102 +1,24 @@
-import {
-  ChangePasswordPage,
-  ChatPage,
-  EditProfilePage,
-  LoginPage,
-  NotFoundErrorPage,
-  ProfilePage,
-  RegistrationPage,
-  ServerErrorPage,
-} from './pages';
-import Component from './services/Component';
-import Store from './services/Store';
-import { BaseProps } from './utils/types';
+import { ChatPage, LoginPage, NotFoundErrorPage, ProfilePage, RegistrationPage, ServerErrorPage } from './pages';
+import Router, { Route } from "./services/Router";
 
-export const enum Pages {
-  Login = 'Login',
-  Registration = 'Registration',
-  Profile = 'Profile',
-  EditProfile = 'EditProfile',
-  ChangePassword = 'ChangePassword',
-  NotFoundError = 'NotFoundError',
-  ServerError = 'ServerError',
-  Chat = 'Chat',
+export const enum Routes {
+  Login = '/',
+  SignUp = '/sign-up',
+  Settings = '/settings',
+  Messenger = '/messenger',
+  ServerError = '/server-error',
+  NotFound = '/not-found',
 }
 
-interface GlobalState {
-  currentPage: Pages;
-}
-
-export const globalStorage = new Store<GlobalState>({
-  currentPage: Pages.Login,
-});
-
-interface AppProps extends BaseProps {
-  currentPage: Pages;
-  loginPage: LoginPage;
-  registrationPage: RegistrationPage;
-  chatPage: ChatPage;
-  profilePage: ProfilePage;
-  editProfilePage: EditProfilePage;
-  changePasswordPage: ChangePasswordPage;
-  notFoundErrorPage: NotFoundErrorPage;
-  serverErrorPage: ServerErrorPage;
-}
-
-export default class App extends Component<AppProps> {
+export default class App {
   constructor() {
-    super({
-      currentPage: globalStorage.state.currentPage,
-      loginPage: new LoginPage(),
-      registrationPage: new RegistrationPage(),
-      profilePage: new ProfilePage(),
-      editProfilePage: new EditProfilePage(),
-      changePasswordPage: new ChangePasswordPage(),
-      chatPage: new ChatPage(),
-      notFoundErrorPage: new NotFoundErrorPage(),
-      serverErrorPage: new ServerErrorPage(),
-    });
-
-    globalStorage.subscribe(this._handleStateChange.bind(this));
-  }
-
-  render() {
-    const fragment = document.createElement('template');
-
-    if (!this.props) {
-      throw new Error();
-    }
-
-    switch (globalStorage.state.currentPage) {
-      case Pages.Login:
-        fragment.content.appendChild(this.props.loginPage.element!);
-        break;
-      case Pages.Registration:
-        fragment.content.appendChild(this.props.registrationPage.element!);
-        break;
-      case Pages.Profile:
-        fragment.content.appendChild(this.props.profilePage.element!);
-        break;
-      case Pages.EditProfile:
-        fragment.content.appendChild(this.props.editProfilePage.element!);
-        break;
-      case Pages.ChangePassword:
-        fragment.content.appendChild(this.props.changePasswordPage.element!);
-        break;
-      case Pages.Chat:
-        fragment.content.appendChild(this.props.chatPage.element!);
-        break;
-      case Pages.ServerError:
-        fragment.content.appendChild(this.props.serverErrorPage.element!);
-        break;
-      default:
-        fragment.content.appendChild(this.props.notFoundErrorPage.element!);
-    }
-
-    return fragment.content;
-  }
-
-  private _handleStateChange(state: GlobalState) {
-    this.props = { currentPage: state.currentPage };
+    new Router('#app', [
+      new Route(Routes.Login, LoginPage),
+      new Route(Routes.SignUp, RegistrationPage),
+      new Route(Routes.Settings, ProfilePage),
+      new Route(Routes.Messenger, ChatPage),
+      new Route(Routes.ServerError, ServerErrorPage),
+      new Route(Routes.NotFound, NotFoundErrorPage),
+    ]);
   }
 }

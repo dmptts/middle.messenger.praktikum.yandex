@@ -5,7 +5,6 @@ import template from './template.hbs?raw';
 interface MessageInputProps extends BaseProps {
   name?: string;
   className?: string;
-  onInput?: EventListener;
 }
 
 export default class MessageInput extends Component<MessageInputProps> {

@@ -1,6 +1,5 @@
 @import url("/src/components/Button/styles.css");
 @import url("/src/components/Input/styles.css");
-@import url("/src/components/Footer/styles.css");
 @import url("/src/components/Badge/styles.css");
 @import url("/src/components/BackButton/styles.css");
 @import url("/src/components/Userpic/styles.css");
@@ -8,3 +7,6 @@
 @import url("/src/components/ChatListItem/styles.css");
 @import url("/src/components/Chat/styles.css");
 @import url("/src/components/MessageInput/styles.css");
+@import url("/src/components/Modal/styles.css");
+@import url("/src/components/UserDeleteList/styles.css");
+@import url("/src/components/UserDeleteListItem/styles.css");

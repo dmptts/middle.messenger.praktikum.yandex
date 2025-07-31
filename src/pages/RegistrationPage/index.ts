@@ -1,10 +1,7 @@
-import { globalStorage, Pages } from '../../App';
-import Footer from '../../components/Footer';
 import Form from '../../components/Form';
 import Input from '../../components/Input';
 import Link from '../../components/Link';
 import Component from '../../services/Component';
-import { BaseProps } from '../../utils/types';
 import {
   validateEmail,
   validateLogin,
@@ -14,13 +11,14 @@ import {
   validatePhone,
 } from '../../utils/validation';
 import template from './template.hbs?raw';
+import AuthController from "../../controllers/AuthController";
 
-interface RegistrationPageProps extends BaseProps {
-  footer: Footer;
-}
-
-export default class RegistrationPage extends Component<RegistrationPageProps> {
+export default class RegistrationPage extends Component {
   constructor() {
+    super();
+  }
+
+  render() {
     const emailInput = new Input({
       id: 'email-input',
       name: 'email',
@@ -84,31 +82,50 @@ export default class RegistrationPage extends Component<RegistrationPageProps> {
       onBlur: () => passwordConfirmationInput.validate(),
     });
 
-    super({
+    return this.compile(template, {
       form: new Form({
         body: [
           emailInput,
           loginInput,
           firstNameInput,
           secondNameInput,
+          phoneInput,
           passwordInput,
           passwordConfirmationInput,
         ],
         buttonText: 'Зарегистрироваться',
         className: 'registration-form registration-page__form',
+        onSubmit: async (e) => {
+          const form = e.target as HTMLFormElement;
+          const formData = new FormData(form);
+
+          const { first_name, second_name, login, password, email, phone } = Object.fromEntries(formData.entries());
+
+          if (
+            typeof first_name === 'string'
+            && typeof second_name === 'string'
+            && typeof login === 'string'
+            && typeof password === 'string'
+            && typeof email === 'string'
+            && typeof phone === 'string'
+          ) {
+            await AuthController.signUp({
+              first_name,
+              second_name,
+              login,
+              password,
+              email,
+              phone
+            })
+          }
+
+        },
       }),
       link: new Link({
         text: 'Войти',
         className: 'registration-page__login-link',
-        onClick: () => globalStorage.state = {
-          currentPage: Pages.Login,
-        },
+        to: '/',
       }),
-      footer: new Footer(),
     });
-  }
-
-  render() {
-    return this.compile(template);
   }
 }

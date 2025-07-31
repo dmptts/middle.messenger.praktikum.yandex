@@ -1,31 +1,19 @@
-import { globalStorage, Pages } from '../../App';
-import Footer from '../../components/Footer';
 import Link from '../../components/Link';
 import Component from '../../services/Component';
-import { BaseProps } from '../../utils/types';
 import template from './template.hbs?raw';
+import { Routes } from "../../App";
 
-interface ServerErrorPageProps extends BaseProps {
-  footer: Footer;
-  link: Link;
-}
-
-export default class ServerErrorPage extends Component<ServerErrorPageProps> {
+export default class ServerErrorPage extends Component {
   constructor() {
-    super({
-      footer: new Footer(),
-      link: new Link({
-        text: 'Назад к чатам',
-        onClick: () => {
-          globalStorage.state = {
-            currentPage: Pages.Chat,
-          };
-        },
-      }),
-    });
+    super();
   }
 
   protected render() {
-    return this.compile(template);
+    return this.compile(template, {
+      link: new Link({
+        text: 'Назад к чатам',
+        to: Routes.Messenger,
+      }),
+    });
   }
 }
