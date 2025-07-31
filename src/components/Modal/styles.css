@@ -8,7 +8,7 @@
   display: none;
   justify-content: center;
   align-items: center;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgb(0 0 0 / 50%);
 }
 
 .modal-overlay--visible {
@@ -28,7 +28,7 @@
   padding: 40px 30px;
   background-color: white;
   border-radius: 12px;
-  box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.14);
+  box-shadow: 0 0 6px 0 rgb(0 0 0 / 14%);
   transform: translate(-50%, -50%);
 }
 
