@@ -1,4 +1,4 @@
-import HTTPTransport, { ClientErrorDto } from "./HTTPTransport";
+import HTTPTransport, { ClientErrorDto, HttpStatus } from "./HTTPTransport";
 import { UserDto } from "./AuthAPI";
 import { Nullable } from "../utils/types";
 
@@ -43,9 +43,9 @@ export default class ChatsAPI {
       },
     })
 
-    if (response.status === 200) {
+    if (response.status === HttpStatus.Ok) {
       return JSON.parse(response.responseText) as ChatListResponseDTO[];
-    } else if (response.status === 400) {
+    } else if (response.status === HttpStatus.BadRequest) {
       const error = JSON.parse(response.responseText) as ClientErrorDto;
       throw new Error(error.reason);
     } else {
@@ -62,9 +62,9 @@ export default class ChatsAPI {
       payload: { title },
     })
 
-    if (response.status === 200) {
+    if (response.status === HttpStatus.Ok) {
       return;
-    } else if (response.status === 400) {
+    } else if (response.status === HttpStatus.BadRequest) {
       const error = JSON.parse(response.responseText) as ClientErrorDto;
       throw new Error(error.reason);
     } else {
@@ -81,9 +81,9 @@ export default class ChatsAPI {
       payload: { chatId },
     })
 
-    if (response.status === 200) {
+    if (response.status === HttpStatus.Ok) {
       return;
-    } else if (response.status === 400) {
+    } else if (response.status === HttpStatus.BadRequest) {
       const error = JSON.parse(response.responseText) as ClientErrorDto;
       throw new Error(error.reason);
     } else {
@@ -99,9 +99,9 @@ export default class ChatsAPI {
       },
     });
 
-    if (response.status === 200) {
+    if (response.status === HttpStatus.Ok) {
       return JSON.parse(response.responseText) as ChatTokenResponseDTO;
-    } else if (response.status === 400) {
+    } else if (response.status === HttpStatus.BadRequest) {
       const error = JSON.parse(response.responseText) as ClientErrorDto;
       throw new Error(error.reason);
     } else {
@@ -118,9 +118,9 @@ export default class ChatsAPI {
       payload,
     });
 
-    if (response.status === 200) {
+    if (response.status === HttpStatus.Ok) {
       return;
-    } else if (response.status === 400) {
+    } else if (response.status === HttpStatus.BadRequest) {
       const error = JSON.parse(response.responseText) as ClientErrorDto;
       throw new Error(error.reason);
     } else {
@@ -137,9 +137,9 @@ export default class ChatsAPI {
       payload,
     });
 
-    if (response.status === 200) {
+    if (response.status === HttpStatus.Ok) {
       return;
-    } else if (response.status === 400) {
+    } else if (response.status === HttpStatus.BadRequest) {
       const error = JSON.parse(response.responseText) as ClientErrorDto;
       throw new Error(error.reason);
     } else {
@@ -155,9 +155,9 @@ export default class ChatsAPI {
       },
     });
 
-    if (response.status === 200) {
+    if (response.status === HttpStatus.Ok) {
       return JSON.parse(response.responseText) as ChatUserResponseDTO[];
-    } else if (response.status === 400) {
+    } else if (response.status === HttpStatus.BadRequest) {
       const error = JSON.parse(response.responseText) as ClientErrorDto;
       throw new Error(error.reason);
     } else {

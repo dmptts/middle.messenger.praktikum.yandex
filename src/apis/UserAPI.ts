@@ -1,4 +1,4 @@
-import HTTPTransport, { ClientErrorDto } from "./HTTPTransport";
+import HTTPTransport, { ClientErrorDto, HttpStatus } from "./HTTPTransport";
 
 export interface ChangeProfileRequestDTO {
   first_name?: string;
@@ -39,9 +39,9 @@ export default class UserAPI {
       payload,
     })
 
-    if (response.status === 200) {
+    if (response.status === HttpStatus.Ok) {
       return JSON.parse(response.responseText) as UserResponseDTO;
-    } else if (response.status === 400) {
+    } else if (response.status === HttpStatus.BadRequest) {
       const error = JSON.parse(response.responseText) as ClientErrorDto;
       throw new Error(error.reason);
     } else {
@@ -58,9 +58,9 @@ export default class UserAPI {
       payload,
     })
 
-    if (response.status === 200) {
+    if (response.status === HttpStatus.Ok) {
       return;
-    } else if (response.status === 400) {
+    } else if (response.status === HttpStatus.BadRequest) {
       const error = JSON.parse(response.responseText) as ClientErrorDto;
       throw new Error(error.reason);
     } else {
@@ -76,9 +76,9 @@ export default class UserAPI {
       payload,
     })
 
-    if (response.status === 200) {
+    if (response.status === HttpStatus.Ok) {
       return JSON.parse(response.responseText) as UserResponseDTO;
-    } else if (response.status === 400) {
+    } else if (response.status === HttpStatus.BadRequest) {
       const error = JSON.parse(response.responseText) as ClientErrorDto;
       throw new Error(error.reason);
     } else {
@@ -95,9 +95,9 @@ export default class UserAPI {
       payload,
     });
 
-    if (response.status === 200) {
+    if (response.status === HttpStatus.Ok) {
       return JSON.parse(response.responseText) as Array<UserResponseDTO>;
-    } else if (response.status === 400) {
+    } else if (response.status === HttpStatus.BadRequest) {
       const error = JSON.parse(response.responseText) as ClientErrorDto;
       throw new Error(error.reason);
     } else {
