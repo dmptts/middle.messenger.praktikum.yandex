@@ -1,5 +1,6 @@
 import { ChatPage, LoginPage, NotFoundErrorPage, ProfilePage, RegistrationPage, ServerErrorPage } from './pages';
 import Router, { Route } from "./services/Router";
+import AuthController from "./controllers/AuthController";
 
 export const enum Routes {
   Login = '/',
@@ -12,6 +13,11 @@ export const enum Routes {
 
 export default class App {
   constructor() {
+    this.init();
+  }
+
+  async init() {
+    await AuthController.getUser();
     new Router('#app', [
       new Route(Routes.Login, LoginPage),
       new Route(Routes.SignUp, RegistrationPage),

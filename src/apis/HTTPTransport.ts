@@ -5,6 +5,18 @@ const enum RequestMethods {
   Delete = 'DELETE',
 }
 
+export const enum HttpStatus {
+  Ok = 200,
+  Created = 201,
+  NoContent = 204,
+  BadRequest = 400,
+  Unauthorized = 401,
+  Forbidden = 403,
+  NotFound = 404,
+  Conflict = 409,
+  InternalServerError = 500,
+}
+
 interface HTTPRequestOptions<T = never> {
   headers?: Record<string, string>;
   payload?: T;

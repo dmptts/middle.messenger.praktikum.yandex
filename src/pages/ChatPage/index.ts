@@ -7,7 +7,6 @@ import template from './template.hbs?raw';
 import { connect } from "../../services/Store";
 import { RootStore } from "../../main";
 import ChatController from "../../controllers/ChatController";
-import AuthController from "../../controllers/AuthController";
 
 export enum ChatPageMode {
   Chat = 'CHAT',
@@ -53,7 +52,6 @@ class ChatPage extends Component<never, ChatPageState> {
 
   protected async componentDidMount() {
     window.addEventListener('resize', this._handleWindowResize.bind(this));
-    await AuthController.getUser();
     await ChatController.getChats();
   }
 

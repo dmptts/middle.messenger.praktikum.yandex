@@ -1,6 +1,7 @@
 import { ComponentConstructor } from "./Component";
 import render from "../utils/render";
 import { BaseProps } from "../utils/types";
+import { RootStore } from "../main";
 
 export default class Router {
   static #instance: Router;
@@ -34,6 +35,14 @@ export default class Router {
   }
 
   #onRoute(path: string) {
+    if (!RootStore.state.currentUser && (path === '/messenger' || path === '/settings')) {
+      this.#history.replaceState({}, "", '/');
+      path = '/';
+    } else if (RootStore.state.currentUser && (path === '/sign-up' || path === '/')) {
+      this.#history.replaceState({}, "", '/messenger');
+      path = '/messenger';
+    }
+
     const targetRoute = this.#routes.find(route => path === route.path);
 
     if (!targetRoute) {

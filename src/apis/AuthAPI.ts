@@ -1,4 +1,4 @@
-import HTTPTransport, { ClientErrorDto } from "./HTTPTransport";
+import HTTPTransport, { ClientErrorDto, HttpStatus } from "./HTTPTransport";
 
 export interface SignUpRequestDTO {
   first_name: string,
@@ -38,9 +38,9 @@ export default class AuthAPI {
       payload,
     })
 
-    if (response.status === 200) {
+    if (response.status === HttpStatus.Ok) {
       return JSON.parse(response.responseText) as SignUpResponseDTO;
-    } else if (response.status === 400) {
+    } else if (response.status === HttpStatus.BadRequest) {
       const error = JSON.parse(response.responseText) as ClientErrorDto;
       throw new Error(error.reason);
     } else {
@@ -57,9 +57,9 @@ export default class AuthAPI {
       payload,
     })
 
-    if (response.status === 200) {
+    if (response.status === HttpStatus.Ok) {
       return;
-    } else if (response.status === 400) {
+    } else if (response.status === HttpStatus.BadRequest) {
       const error = JSON.parse(response.responseText) as ClientErrorDto;
       throw new Error(error.reason);
     } else {
@@ -75,9 +75,9 @@ export default class AuthAPI {
       },
     })
 
-    if (response.status === 200) {
+    if (response.status === HttpStatus.Ok) {
       return;
-    } else if (response.status === 400) {
+    } else if (response.status === HttpStatus.BadRequest) {
       const error = JSON.parse(response.responseText) as ClientErrorDto;
       throw new Error(error.reason);
     } else {
@@ -93,9 +93,9 @@ export default class AuthAPI {
       },
     })
 
-    if (response.status === 200) {
+    if (response.status === HttpStatus.Ok) {
       return JSON.parse(response.responseText) as UserDto;
-    } else if (response.status === 400) {
+    } else if (response.status === HttpStatus.BadRequest) {
       const error = JSON.parse(response.responseText) as ClientErrorDto;
       throw new Error(error.reason);
     } else {

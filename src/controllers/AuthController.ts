@@ -22,9 +22,9 @@ export default class AuthController {
     try {
       await AuthAPI.signIn(payload);
 
-      Router.getInstance().go(Routes.Messenger);
       const user = await AuthAPI.getUser();
       RootStore.dispatch({ type: 'user/set', payload: user });
+      Router.getInstance().go(Routes.Messenger);
     } catch (err) {
       if (err instanceof Error) {
         console.error(`Ошибка: ${err.message}`);
@@ -48,8 +48,8 @@ export default class AuthController {
   static async logOut() {
     try {
       await AuthAPI.signOut();
-      Router.getInstance().go(Routes.Login);
       RootStore.dispatch({ type: 'user/set', payload: null });
+      Router.getInstance().go(Routes.Login);
     } catch (err) {
       if (err instanceof Error) {
         console.error(`Ошибка: ${err.message}`);
