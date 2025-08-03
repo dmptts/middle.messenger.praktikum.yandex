@@ -7,7 +7,7 @@ interface ButtonProps extends BaseProps {
   icon?: string;
   type?: 'button' | 'submit' | 'reset';
   shape?: 'default' | 'circle';
-  variant?: 'default' | 'text';
+  variant?: 'default' | 'text' | 'link';
   className?: string;
   disabled?: boolean;
   onClick?: EventListener;
@@ -20,6 +20,10 @@ export default class Button extends Component<ButtonProps> {
       type: props.type ?? 'button',
       shape: props.shape ?? 'default',
     });
+  }
+
+  get type() {
+    return this.props?.type
   }
 
   render() {

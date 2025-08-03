@@ -3,13 +3,14 @@
     <div class="container profile-page__container">
       {{{userpic}}}
       {{{form}}}
-      <ul class="profile-page__links">
-        <li>{{{editProfileLink}}}</li>
-        <li>{{{changePasswordLink}}}</li>
-        <li>{{{quitLink}}}</li>
-      </ul>
+      {{#ifEquals mode 'DEFAULT'}}
+        <ul class="profile-page__links">
+          <li>{{{editProfileLink}}}</li>
+          <li>{{{changePasswordLink}}}</li>
+          <li>{{{quitLink}}}</li>
+        </ul>
+      {{/ifEquals}}
       {{{backButton}}}
     </div>
   </main>
-  {{{footer}}}
 </div>

@@ -53,6 +53,26 @@
     }
 }
 
+.button-component--link {
+  display: inline-block;
+  padding: 0;
+  color: var(--color-primary);
+  background-color: transparent;
+  border-radius: 0;
+
+  &:hover,
+  &:focus {
+    color: var(--color-primary-hover);
+    background-color: transparent;
+
+  }
+
+  &:active {
+    color: var(--color-primary-active);
+    background-color: transparent;
+  }
+}
+
 .button-component__icon {
     height: 1em;
     aspect-ratio: 1 / 1;

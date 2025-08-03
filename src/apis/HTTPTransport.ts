@@ -1,0 +1,94 @@
+const enum RequestMethods {
+  Get = 'GET',
+  Post = 'POST',
+  Put = 'PUT',
+  Delete = 'DELETE',
+}
+
+export const enum HttpStatus {
+  Ok = 200,
+  Created = 201,
+  NoContent = 204,
+  BadRequest = 400,
+  Unauthorized = 401,
+  Forbidden = 403,
+  NotFound = 404,
+  Conflict = 409,
+  InternalServerError = 500,
+}
+
+interface HTTPRequestOptions<T = never> {
+  headers?: Record<string, string>;
+  payload?: T;
+  timeout?: number;
+}
+
+export interface ClientErrorDto {
+  reason: string;
+}
+
+export default class HTTPTransport {
+  static BASE_URL = 'https://ya-praktikum.tech/api/v2';
+
+  static get(url: string, options: HTTPRequestOptions = {}) {
+    return this.request(`${(HTTPTransport.BASE_URL)}${url}`, RequestMethods.Get, options);
+  }
+
+  static post<T>(url: string, options: HTTPRequestOptions<T> = {}) {
+    return this.request(`${(HTTPTransport.BASE_URL)}${url}`, RequestMethods.Post, options);
+  }
+
+  static put<T>(url: string, options: HTTPRequestOptions<T> = {}) {
+    return this.request(`${(HTTPTransport.BASE_URL)}${url}`, RequestMethods.Put, options);
+  }
+
+  static delete<T>(url: string, options: HTTPRequestOptions<T> = {}) {
+    return this.request(`${(HTTPTransport.BASE_URL)}${url}`, RequestMethods.Delete, options);
+  }
+
+  static request<T>(url: string, method: RequestMethods, options: HTTPRequestOptions<T> = {}): Promise<XMLHttpRequest> {
+    return new Promise((resolve, reject) => {
+      const { headers = {}, payload, timeout = 5000 } = options;
+      const xhr = new XMLHttpRequest();
+      const urlParams = new URLSearchParams();
+      const isGet = method === RequestMethods.Get;
+      const isFormData = payload instanceof FormData;
+      xhr.withCredentials = true;
+
+      if (isGet && !!payload) {
+        Object.entries(payload).forEach(([key, value]) => urlParams.append(key, String(value)));
+      }
+
+      xhr.open(
+        method,
+        urlParams.size
+          ? `${url}?${urlParams.toString()}`
+          : url,
+      );
+
+      if (!isFormData) {
+        Object.keys(headers).forEach(key => {
+          xhr.setRequestHeader(key, headers[key]);
+        });
+      }
+
+      xhr.onload = function() {
+        resolve(xhr);
+      };
+
+      xhr.onabort = reject;
+      xhr.onerror = reject;
+
+      xhr.timeout = timeout;
+      xhr.ontimeout = reject;
+
+      if (isGet || !payload) {
+        xhr.send();
+      } else if (isFormData) {
+        xhr.send(payload);
+      } else {
+        xhr.send(JSON.stringify(payload));
+      }
+    });
+  }
+}
