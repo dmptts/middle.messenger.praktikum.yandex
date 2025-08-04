@@ -1,8 +1,8 @@
 import Handlebars from 'handlebars';
 import { nanoid } from 'nanoid';
-import { BaseProps, Nullable } from '../utils/types';
-import EventBus from './EventBus';
-import { isEqual } from "../utils/isEqual";
+import { BaseProps, Nullable } from '../../utils/types';
+import EventBus from '../EventBus';
+import { isEqual } from "../../utils/isEqual";
 
 export const eventTypesMap = {
   onClick: 'click',
@@ -42,7 +42,7 @@ export default abstract class Component<P extends BaseProps = never, S extends o
   private _props: Nullable<P>;
   private _bus: EventBus<EventListeners>;
 
-  protected constructor(props?: P, state?: S) {
+  constructor(props?: P, state?: S) {
     this._id = nanoid();
     this._bus = new EventBus();
     this._props = null;
