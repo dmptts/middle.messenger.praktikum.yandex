@@ -1,5 +1,5 @@
 import { ChatPage, LoginPage, NotFoundErrorPage, ProfilePage, RegistrationPage, ServerErrorPage } from './pages';
-import Router, { Route } from "./services/Router";
+import { Route, Router } from "./services/Router";
 import AuthController from "./controllers/AuthController";
 
 export const enum Routes {

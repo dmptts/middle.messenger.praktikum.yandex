@@ -20,6 +20,7 @@ import { ChangeProfileRequestDTO } from "../../apis/UserAPI";
 import AuthController from "../../controllers/AuthController";
 import HTTPTransport from "../../apis/HTTPTransport";
 import Router from "../../services/Router";
+import { Router } from "../../services/Router";
 import { Routes } from "../../App";
 
 const enum ProfilePageModes {
