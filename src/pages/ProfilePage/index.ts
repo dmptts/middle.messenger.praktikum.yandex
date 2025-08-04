@@ -18,8 +18,7 @@ import { connect } from "../../services/Store";
 import ProfileController from "../../controllers/ProfileController";
 import { ChangeProfileRequestDTO } from "../../apis/UserAPI";
 import AuthController from "../../controllers/AuthController";
-import HTTPTransport from "../../apis/HTTPTransport";
-import Router from "../../services/Router";
+import { HTTPTransport } from "../../apis/HTTPTransport";
 import { Router } from "../../services/Router";
 import { Routes } from "../../App";
 
