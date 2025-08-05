@@ -1,7 +1,7 @@
 import Component from '../../services/Component';
 import { BaseProps } from '../../utils/types';
 import template from './template.hbs?raw';
-import Router from "../../services/Router";
+import { Router } from "../../services/Router";
 
 interface LinkProps extends BaseProps {
   to: string;

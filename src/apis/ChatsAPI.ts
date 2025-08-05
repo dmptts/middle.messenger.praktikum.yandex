@@ -1,4 +1,4 @@
-import HTTPTransport, { ClientErrorDto, HttpStatus } from "./HTTPTransport";
+import { HTTPTransport, ClientErrorDto, HttpStatus } from "./HTTPTransport";
 import { UserDto } from "./AuthAPI";
 import { Nullable } from "../utils/types";
 

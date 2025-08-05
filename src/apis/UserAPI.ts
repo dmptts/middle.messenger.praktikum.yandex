@@ -1,4 +1,4 @@
-import HTTPTransport, { ClientErrorDto, HttpStatus } from "./HTTPTransport";
+import { ClientErrorDto, HttpStatus, HTTPTransport } from "./HTTPTransport";
 
 export interface ChangeProfileRequestDTO {
   first_name?: string;

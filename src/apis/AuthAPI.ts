@@ -1,4 +1,4 @@
-import HTTPTransport, { ClientErrorDto, HttpStatus } from "./HTTPTransport";
+import { ClientErrorDto, HttpStatus, HTTPTransport } from "./HTTPTransport";
 
 export interface SignUpRequestDTO {
   first_name: string,
