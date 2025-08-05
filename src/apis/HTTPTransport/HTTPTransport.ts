@@ -27,7 +27,7 @@ export interface ClientErrorDto {
   reason: string;
 }
 
-export default class HTTPTransport {
+export class HTTPTransport {
   static BASE_URL = 'https://ya-praktikum.tech/api/v2';
 
   static get(url: string, options: HTTPRequestOptions = {}) {

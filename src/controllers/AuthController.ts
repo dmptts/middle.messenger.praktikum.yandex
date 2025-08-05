@@ -1,6 +1,6 @@
 import AuthAPI, { SignInRequestDTO, SignUpRequestDTO } from "../apis/AuthAPI";
 import { RootStore } from "../main";
-import Router from "../services/Router";
+import { Router } from "../services/Router";
 import { Routes } from "../App";
 
 export default class AuthController {

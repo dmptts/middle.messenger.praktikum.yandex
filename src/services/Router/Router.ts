@@ -1,9 +1,9 @@
-import { ComponentConstructor } from "./Component";
-import render from "../utils/render";
-import { BaseProps } from "../utils/types";
-import { RootStore } from "../main";
+import { ComponentConstructor } from "../Component";
+import render from "../../utils/render";
+import { BaseProps } from "../../utils/types";
+import { RootStore } from "../../main";
 
-export default class Router {
+export class Router {
   static #instance: Router;
   readonly #rootQuery!: string;
   readonly #history!: History;
@@ -46,7 +46,7 @@ export default class Router {
     const targetRoute = this.#routes.find(route => path === route.path);
 
     if (!targetRoute) {
-      this.#routes[this.#routes.length - 1].navigate(this.#rootQuery);
+      this.#routes[this.#routes.length - 1]?.navigate(this.#rootQuery);
       return;
     }
 
